@@ -1,6 +1,17 @@
 apply from: rootProject.file('config/hooks/install-git-hooks.gradle')
 
 buildscript {
+  buildscript {
+    ext.versions = [
+    ]
+
+    ext.deps = [
+        javapoet: 'com.squareup:javapoet:1.9.0',
+        junit: 'junit:junit:4.12',
+        truth: 'com.google.truth:truth:0.34',
+        compiletesting: 'com.google.testing.compile:compile-testing:0.11',
+    ]
+  }
   repositories {
     mavenCentral()
     jcenter()
