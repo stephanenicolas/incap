@@ -33,9 +33,9 @@ import java.io.IOException;
 public interface BuildWorkflow {
 
     /**
-     * Results that can be returned from preBuild, when an incremental build is requested.
+     * Status returned by {@code preBuild}.
      */
-    enum PreBuildResult {
+    enum PreBuildResultStatus {
         /**
          * Incap has determined that the incremental build can proceed.
          */
@@ -63,7 +63,26 @@ public interface BuildWorkflow {
         ERROR
     }
 
-    enum PostBuildResult {
+    /**
+     * Result returned by {@code preBuild}.
+     */
+    interface PreBuildResult {
+        /**
+         * The status code returned for this build.
+         */
+        PreBuildResultStatus status();
+
+        /**
+         * If there was an error, a message to issue.
+         * @return the build message, or null if none
+         */
+        String message();
+    }
+
+    /**
+     * Status returned by {@code preBuild}.
+     */
+    enum PostBuildResultStatus {
         /**
          * Returned when incremental annotation processing was successful.
          * Any relevant state will have been persisted to disk.
@@ -75,6 +94,22 @@ public interface BuildWorkflow {
          * Any intermediate state from this build step will have been discarded.
          */
         FAILURE
+    }
+
+    /**
+     * Result returned by {@code preBuild}.
+     */
+    interface PostBuildResult {
+        /**
+         * Status code returned by {@code postBuild}.
+         */
+        PostBuildResultStatus status();
+
+        /**
+         * If there was an error/failure, the message to issue.
+         * @return the build message, or null if none
+         */
+        String message();
     }
 
     /**
