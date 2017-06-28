@@ -1,3 +1,5 @@
+apply from: rootProject.file('config/hooks/install-git-hooks.gradle')
+
 buildscript {
   repositories {
     mavenCentral()
