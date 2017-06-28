@@ -1,6 +1,7 @@
 include ':annotations'
 include ':processor1'
 include ':app'
+include ':core'
 
 
 rootProject.name = 'incremental-di-test'
