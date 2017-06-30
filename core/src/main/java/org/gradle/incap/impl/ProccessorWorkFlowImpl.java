@@ -2,6 +2,7 @@ package org.gradle.incap.impl;
 
 import java.io.File;
 import java.util.Set;
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
@@ -10,14 +11,18 @@ import org.gradle.incap.IncrementalFiler;
 import org.gradle.incap.ProcessorWorkflow;
 
 public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
+
+  private boolean isIncremental;
+
   @Override
   public boolean isIncremental() {
-    return false;
+    return isIncremental;
   }
 
   @Override
   public IncrementalFiler init(ProcessingEnvironment processingEnv) {
-    return null;
+    Filer filer = processingEnv.getFiler();
+    return new IncrementalFiler(filer);
   }
 
   @Override
