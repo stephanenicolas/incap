@@ -78,7 +78,10 @@ public class StateGraph {
     }
 
     private InputFile findInputFileForElement(Element element) {
+        System.out.println("findInputFileForElement: " + element);
+        System.out.println("findInputFileForElement kind: " + element.getKind().toString());
         TypeElement enclosingTypeElement = ElementUtils.enclosingTypeElement(element);
+        System.out.println("findInputFileForElement enclosingTypeElement: " + enclosingTypeElement);
         String className = enclosingTypeElement.getSimpleName().toString();
         return new InputFile(className);
     }

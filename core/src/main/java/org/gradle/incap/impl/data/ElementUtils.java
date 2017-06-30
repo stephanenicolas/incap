@@ -19,8 +19,6 @@ public class ElementUtils {
             throw new IllegalArgumentException();
         }
 
-        element = element.getEnclosingElement();
-
         if (element.getKind() == ElementKind.PACKAGE) {
             //element is a top level class, returning null according to the contract:
             return null;
