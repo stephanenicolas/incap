@@ -32,6 +32,7 @@ public class Processor1 extends AbstractProcessor {
         super.init(processingEnv);
         Filer filer = processingEnv.getFiler();
         processorWorkflow = getProcessorWorkflow();
+        processorWorkflow.init(processingEnv);
         incrementalFiler = processorWorkflow.createIncrementalFiler(filer);
     }
 

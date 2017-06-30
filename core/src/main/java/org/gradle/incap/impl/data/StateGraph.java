@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.lang.model.element.Element;
+import javax.lang.model.util.Elements;
 
 public class StateGraph {
 
@@ -19,6 +20,11 @@ public class StateGraph {
   //backward edges
   private Map<GeneratedFile, Set<ElementEntry>> mapGeneratedFileToElements = new HashMap<>();
   private Map<ElementEntry, InputFile> mapElementToInputFiles = new HashMap<>();
+  private Elements elementUtils;
+
+  public StateGraph(Elements elementUtils) {
+    this.elementUtils = elementUtils;
+  }
 
   /**
    * The incremental filer will call this one.

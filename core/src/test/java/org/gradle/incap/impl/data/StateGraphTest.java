@@ -1,6 +1,8 @@
 package org.gradle.incap.impl.data;
 
 import java.util.Set;
+import javax.lang.model.util.Elements;
+import org.easymock.EasyMock;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -12,7 +14,8 @@ public class StateGraphTest {
   @org.junit.Test
   public void testAddGenerationEdge_shouldReturnSingleParticipatingElement() throws Exception {
     //GIVEN
-    stateGraphUnderTest = new StateGraph();
+    Elements mockElements = EasyMock.createMock(Elements.class);
+    stateGraphUnderTest = new StateGraph(mockElements);
     GeneratedFile generatedFile = new GeneratedSourceFile("foo");
     ElementEntry entry1 = new ElementEntry("");
 
@@ -27,7 +30,8 @@ public class StateGraphTest {
   @org.junit.Test
   public void testAddGenerationEdge_shouldReturnSingleParticipatingElements() throws Exception {
     //GIVEN
-    stateGraphUnderTest = new StateGraph();
+    Elements mockElements = EasyMock.createMock(Elements.class);
+    stateGraphUnderTest = new StateGraph(mockElements);
     GeneratedFile generatedFile = new GeneratedSourceFile("foo");
     ElementEntry entry1 = new ElementEntry("");
     ElementEntry entry2 = new ElementEntry("");

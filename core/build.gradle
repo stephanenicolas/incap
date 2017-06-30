@@ -11,4 +11,5 @@ configurations {
 dependencies {
   compile project(':element-query-language')
   testCompile deps.junit
+  testCompile deps.easymock
 }

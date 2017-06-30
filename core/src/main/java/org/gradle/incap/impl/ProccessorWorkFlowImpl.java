@@ -21,7 +21,7 @@ import org.gradle.incap.impl.data.StateGraph;
 public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
 
   private boolean isIncremental;
-  private StateGraph stateGraph = new StateGraph();
+  private StateGraph stateGraph;
   private AnnotationFinder annotationFinder;
   private AnnotationPathEncoder annotationPathEncoder;
   private Filer filer;
@@ -40,6 +40,7 @@ public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
     messager = processingEnv.getMessager();
     annotationFinder = new AnnotationFinder(elementUtils);
     annotationPathEncoder = new AnnotationPathEncoder();
+    stateGraph = new StateGraph(elementUtils);
     return new IncrementalFiler(filer);
   }
 
