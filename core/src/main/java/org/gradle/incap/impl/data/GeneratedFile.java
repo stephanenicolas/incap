@@ -1,5 +1,6 @@
 package org.gradle.incap.impl.data;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.lang.model.element.Element;
 
@@ -11,5 +12,13 @@ public abstract class GeneratedFile {
     }
 
     private GeneratedFileType type;
-    private List<Element> originatingElements;
+    private List<Element> originatingElements = new ArrayList<>();
+
+    public GeneratedFileType getType() {
+        return type;
+    }
+
+    public List<Element> getOriginatingElements() {
+        return originatingElements;
+    }
 }
