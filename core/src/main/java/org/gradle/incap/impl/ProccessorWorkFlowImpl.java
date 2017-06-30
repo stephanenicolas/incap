@@ -19,8 +19,8 @@ public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
 
   private boolean isIncremental;
   private StateGraph stateGraph = new StateGraph();
-  private AnnotationFinder annotationFinder = new AnnotationFinder();
-  private AnnotationPathEncoder annotationPathEncoder = new AnnotationPathEncoder();
+  private AnnotationFinder annotationFinder;
+  private AnnotationPathEncoder annotationPathEncoder;
   private Filer filer;
   private Elements elementUtils;
   private Messager messager;

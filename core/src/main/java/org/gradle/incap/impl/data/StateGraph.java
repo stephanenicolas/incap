@@ -1,20 +1,16 @@
 package org.gradle.incap.impl.data;
 
-import com.gradle.incap.AnnotationFinder;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.lang.model.element.Element;
 
-import static com.sun.tools.doclint.Entity.ge;
-import static com.sun.tools.doclint.Entity.nu;
-
 public class StateGraph {
 
   private Set<InputFile> inputFiles = new HashSet<>();
-  private Set<ElementEntry> elementEntries= new HashSet<>();
-  private  Set<GeneratedFile> generatedFiles = new HashSet<>();
+  private Set<ElementEntry> elementEntries = new HashSet<>();
+  private Set<GeneratedFile> generatedFiles = new HashSet<>();
 
   //forward edges
   private Map<InputFile, Set<ElementEntry>> mapInputToElements = new HashMap<>();
@@ -26,8 +22,6 @@ public class StateGraph {
 
   /**
    * The incremental filer will call this one.
-   * @param name
-   * @param originatingElements
    */
   public void addSourceFile(CharSequence name, Element... originatingElements) {
     GeneratedFile generatedFile = new GeneratedSourceFile(name);
@@ -42,28 +36,28 @@ public class StateGraph {
 
   /* package-private*/ void addGenerationEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
     addBackwardEdge(generatedFile, originatingElements);
-      addForwardEdge(generatedFile, originatingElements);
+    addForwardEdge(generatedFile, originatingElements);
   }
 
-    private void addForwardEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
-        for (ElementEntry originatingElement : originatingElements) {
-            Set<GeneratedFile> elementEntries = mapElementToGeneratedFiles.get(originatingElement);
-            if (elementEntries == null) {
-                elementEntries = new HashSet<>();
-            }
-            elementEntries.add(generatedFile);
-            mapElementToGeneratedFiles.put(originatingElement, elementEntries);
-        }
+  private void addForwardEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
+    for (ElementEntry originatingElement : originatingElements) {
+      Set<GeneratedFile> elementEntries = mapElementToGeneratedFiles.get(originatingElement);
+      if (elementEntries == null) {
+        elementEntries = new HashSet<>();
+      }
+      elementEntries.add(generatedFile);
+      mapElementToGeneratedFiles.put(originatingElement, elementEntries);
+    }
+  }
+
+  private void addBackwardEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
+    Set<ElementEntry> originatingElementEntries = new HashSet<>();
+    for (ElementEntry originatingElement : originatingElements) {
+      originatingElementEntries.add(originatingElement);
     }
 
-    private void addBackwardEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
-        Set<ElementEntry> originatingElementEntries = new HashSet<>();
-        for (ElementEntry originatingElement : originatingElements) {
-            originatingElementEntries.add(originatingElement);
-        }
-
-        mapGeneratedFileToElements.put(generatedFile, originatingElementEntries);
-    }
+    mapGeneratedFileToElements.put(generatedFile, originatingElementEntries);
+  }
 
   public Set<Element> getParticipatingElements(GeneratedFile generatedFile) {
     Set<ElementEntry> participatingElementEntries = getParticipatingElementEntries(generatedFile);
