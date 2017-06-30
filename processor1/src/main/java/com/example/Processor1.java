@@ -91,7 +91,8 @@ public class Processor1 extends AbstractProcessor {
         Element[] result = new Element[elementsAnnotatedWith.size()];
         int index = 0;
         for (Element element : elementsAnnotatedWith) {
-            result[index] = element;
+            System.out.println("element: " + element);
+            result[index++] = element;
         }
 
         return result;

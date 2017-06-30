@@ -1,5 +1,8 @@
 package org.gradle.incap.impl.data;
 
+import com.gradle.incap.AnnotationFinder;
+import com.gradle.incap.AnnotationPathEncoder;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,6 +23,14 @@ public class StateGraph {
   //backward edges
   private Map<GeneratedFile, Set<ElementEntry>> mapGeneratedFileToElements = new HashMap<>();
   private Map<ElementEntry, InputFile> mapElementToInputFiles = new HashMap<>();
+  private final AnnotationFinder annotationFinder;
+  private final AnnotationPathEncoder annotationPathEncoder;
+
+  public StateGraph(AnnotationFinder annotationFinder,
+      AnnotationPathEncoder annotationPathEncoder) {
+    this.annotationFinder = annotationFinder;
+    this.annotationPathEncoder = annotationPathEncoder;
+  }
 
   /**
    * The incremental filer will call this one.
@@ -29,7 +40,10 @@ public class StateGraph {
 
     ElementEntry[] originatingElementEntries = new ElementEntry[originatingElements.length];
     for (int i = 0; i < originatingElementEntries.length; i++) {
-      originatingElementEntries[i] = new ElementEntry(originatingElements[i]);
+      Element originatingElement = originatingElements[i];
+      System.out.println(" originatingElement annotated with: " + originatingElement);
+      originatingElementEntries[i] = new ElementEntry(originatingElement,
+          annotationPathEncoder.encodeClass(originatingElement));
     }
 
     addGenerationEdge(generatedFile, originatingElementEntries);

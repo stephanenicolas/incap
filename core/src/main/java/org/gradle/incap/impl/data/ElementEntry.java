@@ -7,8 +7,8 @@ public class ElementEntry {
   private Element element;
   private String eqlPath;
 
-  public ElementEntry(Element element) {
-    this.eqlPath = generateEqlPath(element);
+  public ElementEntry(Element element, String eqlPath) {
+    this.eqlPath = eqlPath;
     this.element = element;
   }
 
@@ -16,19 +16,12 @@ public class ElementEntry {
     this.eqlPath = eqlPath;
   }
 
+  public void setElement(Element element) {
+    this.element = element;
+  }
+
   public Element getElement() {
-    if (element == null) {
-      element = lookupElement(eqlPath);
-    }
     return element;
-  }
-
-  private String generateEqlPath(Element element) {
-    return null;
-  }
-
-  private Element lookupElement(String eqlPath) {
-    return null;
   }
 
   @Override
@@ -44,5 +37,9 @@ public class ElementEntry {
   @Override
   public int hashCode() {
     return eqlPath.hashCode();
+  }
+
+  public String getEqlPath() {
+    return eqlPath;
   }
 }

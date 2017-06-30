@@ -19,5 +19,6 @@ package com.gradle.incap;
  */
 public interface QueryLanguage {
     String LOCATOR_ANNOTATION_ON_FIELD = "af";
+    String LOCATOR_CLASS = "c";
     String SEPARATOR = ":";
 }

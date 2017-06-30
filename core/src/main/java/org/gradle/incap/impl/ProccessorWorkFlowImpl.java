@@ -38,7 +38,7 @@ public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
     messager = processingEnv.getMessager();
     annotationFinder = new AnnotationFinder(elementUtils);
     annotationPathEncoder = new AnnotationPathEncoder();
-    stateGraph = new StateGraph();
+    stateGraph = new StateGraph(annotationFinder, annotationPathEncoder);
     return new IncrementalFiler(filer);
   }
 
@@ -53,7 +53,12 @@ public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
     Set<Element> elements = new HashSet<>();
     if(participatingElementEntries != null) {
       for (ElementEntry participatingElementEntry : participatingElementEntries) {
-        elements.add(participatingElementEntry.getElement());
+        Element element = participatingElementEntry.getElement();
+        if(element == null) {
+          element = annotationFinder.lookupElement(participatingElementEntry.getEqlPath());
+          participatingElementEntry.setElement(element);
+        }
+        elements.add(element);
       }
     }
     return elements;

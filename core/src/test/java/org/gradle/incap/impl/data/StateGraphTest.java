@@ -1,7 +1,11 @@
 package org.gradle.incap.impl.data;
 
+import com.gradle.incap.AnnotationFinder;
+import com.gradle.incap.AnnotationPathEncoder;
 import java.util.Set;
+import javax.lang.model.util.Elements;
 
+import static org.easymock.EasyMock.createMock;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
@@ -13,7 +17,9 @@ public class StateGraphTest {
   @org.junit.Test
   public void testAddGenerationEdge_shouldReturnSingleParticipatingElement() throws Exception {
     //GIVEN
-    stateGraphUnderTest = new StateGraph();
+    AnnotationFinder mockAnnotationFinder = createMock(AnnotationFinder.class);
+    AnnotationPathEncoder mockAnnotationPathEncoder= createMock(AnnotationPathEncoder.class);
+    stateGraphUnderTest = new StateGraph(mockAnnotationFinder, mockAnnotationPathEncoder);
     GeneratedFile generatedFile = new GeneratedSourceFile("foo");
     ElementEntry entry1 = new ElementEntry("");
 
@@ -28,7 +34,9 @@ public class StateGraphTest {
   @org.junit.Test
   public void testAddGenerationEdge_shouldReturnSingleParticipatingElements() throws Exception {
     //GIVEN
-    stateGraphUnderTest = new StateGraph();
+    AnnotationFinder mockAnnotationFinder = createMock(AnnotationFinder.class);
+    AnnotationPathEncoder mockAnnotationPathEncoder= createMock(AnnotationPathEncoder.class);
+    stateGraphUnderTest = new StateGraph(mockAnnotationFinder, mockAnnotationPathEncoder);
     GeneratedFile generatedFile = new GeneratedSourceFile("foo");
     ElementEntry entry1 = new ElementEntry("abc");
     ElementEntry entry2 = new ElementEntry("bcd");
