@@ -52,8 +52,10 @@ public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
   public Set<Element> getParticipatingElements(GeneratedFile target) {
     Set<ElementEntry> participatingElementEntries = stateGraph.getParticipatingElementEntries(target);
     Set<Element> elements = new HashSet<>();
-    for (ElementEntry participatingElementEntry : participatingElementEntries) {
-      elements.add(participatingElementEntry.getElement());
+    if(participatingElementEntries != null) {
+      for (ElementEntry participatingElementEntry : participatingElementEntries) {
+        elements.add(participatingElementEntry.getElement());
+      }
     }
     return elements;
   }
