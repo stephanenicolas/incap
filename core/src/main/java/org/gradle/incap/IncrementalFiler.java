@@ -15,7 +15,12 @@
  */
 package org.gradle.incap;
 
+import java.io.IOException;
 import javax.annotation.processing.Filer;
+import javax.lang.model.element.Element;
+import javax.tools.FileObject;
+import javax.tools.JavaFileManager;
+import javax.tools.JavaFileObject;
 
 /**
  * Replacement/proxy for the {@code javax.annotation.processing.Filer} passed
@@ -28,6 +33,32 @@ import javax.annotation.processing.Filer;
  * for each generated target file.  They are not optional, and the API will throw a runtime
  * exception if the AP fails to provide them for a given output.
  */
-public interface IncrementalFiler extends Filer {
+public class IncrementalFiler implements Filer {
 
+  private Filer filer;
+
+  public IncrementalFiler(Filer filer) {
+    this.filer = filer;
+  }
+
+  @Override
+  public JavaFileObject createSourceFile(CharSequence name, Element... originatingElements) throws IOException {
+    return filer.createSourceFile(name, originatingElements);
+  }
+
+  @Override
+  public JavaFileObject createClassFile(CharSequence name, Element... originatingElements) throws IOException {
+    return filer.createClassFile(name, originatingElements);
+  }
+
+  @Override
+  public FileObject createResource(JavaFileManager.Location location, CharSequence pkg, CharSequence relativeName, Element... originatingElements)
+      throws IOException {
+    return filer.createResource(location, pkg, relativeName, originatingElements);
+  }
+
+  @Override
+  public FileObject getResource(JavaFileManager.Location location, CharSequence pkg, CharSequence relativeName) throws IOException {
+    return filer.getResource(location, pkg, relativeName);
+  }
 }
