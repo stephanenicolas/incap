@@ -1,6 +1,7 @@
 package com.gradle.incap;
 
 import static com.gradle.incap.QueryLanguage.LOCATOR_ANNOTATION_ON_FIELD;
+import static com.gradle.incap.QueryLanguage.LOCATOR_CLASS;
 import static com.gradle.incap.QueryLanguage.SEPARATOR;
 
 import java.lang.annotation.Annotation;
@@ -23,4 +24,16 @@ public class AnnotationPathEncoder {
                 .append(annotationTypeName)
                 .toString();
     }
+
+  public String encodeClass(Element classElement) {
+    System.out.println(" classElement annotated with: " + classElement);
+
+    final String className = classElement.toString();
+    return new StringBuilder()
+        .append(LOCATOR_CLASS)
+        .append(SEPARATOR)
+        .append(className)
+        .toString();
+  }
+
 }
