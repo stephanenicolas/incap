@@ -9,10 +9,12 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import org.gradle.incap.IncrementalFiler;
 import org.gradle.incap.ProcessorWorkflow;
+import org.gradle.incap.impl.data.StateGraph;
 
 public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
 
   private boolean isIncremental;
+  private StateGraph stateGraph = new StateGraph();
 
   @Override
   public boolean isIncremental() {
@@ -33,5 +35,10 @@ public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
   @Override
   public Set<Element> getParticipatingElements(File target) {
     return null;
+  }
+
+  @Override
+  public StateGraph getStateGraph() {
+    return stateGraph;
   }
 }

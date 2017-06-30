@@ -21,6 +21,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import org.gradle.incap.impl.data.StateGraph;
 
 /**
  * Main INCAP API surface for annotation processors. <p>
@@ -107,4 +108,6 @@ public interface ProcessorWorkflow {
      * That is to say, {@code originatingElements = modifiedElements + participatingElements}.
      */
     Set<Element> getParticipatingElements(File target);
+
+    StateGraph getStateGraph();
 }

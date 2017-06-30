@@ -21,6 +21,7 @@ import javax.lang.model.element.Element;
 import javax.tools.FileObject;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
+import org.gradle.incap.impl.data.StateGraph;
 
 /**
  * Replacement/proxy for the {@code javax.annotation.processing.Filer} passed
@@ -43,6 +44,8 @@ public class IncrementalFiler implements Filer {
 
   @Override
   public JavaFileObject createSourceFile(CharSequence name, Element... originatingElements) throws IOException {
+    ProcessorWorkflow processorWorkflow = Incap.getProcessorWorkflow();
+    processorWorkflow.getStateGraph().addSourceFile(name, originatingElements);
     return filer.createSourceFile(name, originatingElements);
   }
 
