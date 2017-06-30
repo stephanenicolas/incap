@@ -1,5 +1,6 @@
 package org.gradle.incap.impl.data;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -22,14 +23,35 @@ public class StateGraph {
 
   /**
    * The incremental filer will call this one.
-   * @param generatedFile
+   * @param name
    * @param originatingElements
    */
   public void addSourceFile(CharSequence name, Element... originatingElements) {
+    GeneratedFile generatedFile = new GeneratedSourceFile(name, Arrays.asList(originatingElements));
 
+    ElementEntry[] originatingElementEntries = new ElementEntry[originatingElements.length];
+    for (int i = 0; i < originatingElementEntries.length; i++) {
+      originatingElementEntries[i] = new ElementEntry(originatingElements[i]);
+    }
+
+    addGenerationEdge(generatedFile, originatingElementEntries);
   }
 
   /* package-private*/ void addGenerationEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
+    addBackwardEdge(generatedFile, originatingElements);
+      addForwardEdge(generatedFile, originatingElements);
   }
 
+    private void addForwardEdge(GeneratedFile generatedFile, ElementEntry[] originatingElements) {
+        
+    }
+
+    private void addBackwardEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
+        Set<ElementEntry> originatingElementEntries = new HashSet<>();
+        for (ElementEntry originatingElement : originatingElements) {
+            originatingElementEntries.add(originatingElement);
+        }
+
+        mapGeneratedFileToElements.put(generatedFile, originatingElementEntries);
+    }
 }

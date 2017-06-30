@@ -24,4 +24,9 @@ public class GeneratedResourceFile extends GeneratedFile {
     public CharSequence getRelativeName() {
         return relativeName;
     }
+
+    @Override
+    public GeneratedFileType getType() {
+        return GeneratedFileType.RESOURCE;
+    }
 }

@@ -10,4 +10,9 @@ public class GeneratedClassFile extends GeneratedFile {
     public CharSequence getName() {
         return name;
     }
+
+    @Override
+    public GeneratedFileType getType() {
+        return GeneratedFileType.CLASS;
+    }
 }

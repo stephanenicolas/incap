@@ -11,12 +11,9 @@ public abstract class GeneratedFile {
         RESOURCE
     }
 
-    private GeneratedFileType type;
-    private List<Element> originatingElements = new ArrayList<>();
+    protected List<Element> originatingElements = new ArrayList<>();
 
-    public GeneratedFileType getType() {
-        return type;
-    }
+    abstract GeneratedFileType getType();
 
     public List<Element> getOriginatingElements() {
         return originatingElements;
