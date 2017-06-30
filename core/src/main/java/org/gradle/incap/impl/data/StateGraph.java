@@ -18,7 +18,7 @@ public class StateGraph {
 
   //backward edges
   private Map<GeneratedFile, Set<ElementEntry>> mapGeneratedFileToElements = new HashMap<>();
-  private Map<ElementEntry, Set<InputFile>> mapElementToInputFiles = new HashMap<>();
+  private Map<ElementEntry, InputFile> mapElementToInputFiles = new HashMap<>();
 
   /**
    * The incremental filer will call this one.
