@@ -2,7 +2,6 @@ package org.gradle.incap.impl;
 
 import com.gradle.incap.AnnotationFinder;
 import com.gradle.incap.AnnotationPathEncoder;
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.processing.Filer;
@@ -36,11 +35,10 @@ public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
   @Override
   public IncrementalFiler init(ProcessingEnvironment processingEnv) {
     filer = processingEnv.getFiler();
-    elementUtils = processingEnv.getElementUtils();
     messager = processingEnv.getMessager();
     annotationFinder = new AnnotationFinder(elementUtils);
     annotationPathEncoder = new AnnotationPathEncoder();
-    stateGraph = new StateGraph(elementUtils);
+    stateGraph = new StateGraph();
     return new IncrementalFiler(filer);
   }
 
