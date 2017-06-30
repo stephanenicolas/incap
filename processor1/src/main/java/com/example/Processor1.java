@@ -2,13 +2,12 @@ package com.example;
 
 import static java.lang.String.format;
 import static javax.lang.model.SourceVersion.latestSupported;
+import static org.gradle.incap.Incap.*;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -19,16 +18,21 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 import org.gradle.incap.IncrementalFiler;
+import org.gradle.incap.ProcessorWorkflow;
+import org.gradle.incap.impl.data.GeneratedFile;
+import org.gradle.incap.impl.data.GeneratedSourceFile;
 
 public class Processor1 extends AbstractProcessor {
 
     private IncrementalFiler incrementalFiler;
+    private ProcessorWorkflow processorWorkflow;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
         Filer filer = processingEnv.getFiler();
-        incrementalFiler = new IncrementalFiler(filer);
+        processorWorkflow = getProcessorWorkflow();
+        incrementalFiler = processorWorkflow.createIncrementalFiler(filer);
     }
 
     @Override
@@ -52,15 +56,17 @@ public class Processor1 extends AbstractProcessor {
         // generates a class with a constant that contains the name of all classes containing an annotation.
         Set<? extends Element> elementsAnnotatedWith = roundEnv.getElementsAnnotatedWith(Annotation1.class);
         Set<String> nameOfClassesContainingAnnotation1 = new HashSet<>();
-        for (Element elementWithAnnotation1 : elementsAnnotatedWith) {
-            nameOfClassesContainingAnnotation1.add(getEnclosingClassName(elementWithAnnotation1));
-        }
+        processElements(elementsAnnotatedWith, nameOfClassesContainingAnnotation1);
 
         String generatedClassName = "GeneratedFoo";
+        GeneratedFile generatedFile = new GeneratedSourceFile(generatedClassName);
+        Set<Element> participatingElements = processorWorkflow.getParticipatingElements(generatedFile);
+        processElements(participatingElements, nameOfClassesContainingAnnotation1);
+
         PrintWriter printWriter = null;
         try {
-            JavaFileObject generatedFile = incrementalFiler.createSourceFile(generatedClassName, toArray(elementsAnnotatedWith));
-            Writer writer = generatedFile.openWriter();
+            JavaFileObject generatedObjectFile = incrementalFiler.createSourceFile(generatedClassName, toArray(elementsAnnotatedWith));
+            Writer writer = generatedObjectFile.openWriter();
             printWriter = new PrintWriter(writer);
             String javaString = brewJava(generatedClassName, nameOfClassesContainingAnnotation1);
             printWriter.append(javaString);
@@ -72,6 +78,12 @@ public class Processor1 extends AbstractProcessor {
             }
         }
         return false;
+    }
+
+    private void processElements(Set<? extends Element> elementsAnnotatedWith, Set<String> nameOfClassesContainingAnnotation1) {
+        for (Element elementWithAnnotation1 : elementsAnnotatedWith) {
+            nameOfClassesContainingAnnotation1.add(getEnclosingClassName(elementWithAnnotation1));
+        }
     }
 
     private Element[] toArray(Set<? extends Element> elementsAnnotatedWith) {

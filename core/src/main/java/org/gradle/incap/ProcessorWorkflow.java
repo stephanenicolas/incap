@@ -17,10 +17,12 @@ package org.gradle.incap;
 
 import java.io.File;
 import java.util.Set;
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import org.gradle.incap.impl.data.GeneratedFile;
 import org.gradle.incap.impl.data.StateGraph;
 
 /**
@@ -107,7 +109,9 @@ public interface ProcessorWorkflow {
      * <p>
      * That is to say, {@code originatingElements = modifiedElements + participatingElements}.
      */
-    Set<Element> getParticipatingElements(File target);
+    Set<Element> getParticipatingElements(GeneratedFile target);
 
     StateGraph getStateGraph();
+
+    IncrementalFiler createIncrementalFiler(Filer filer);
 }
