@@ -92,41 +92,38 @@ public class BuildSpec {
         /**
          * Sets the build type.  This is a required parameter.
          */
-        public void setBuildType(BuildType type) {
+        public Builder setBuildType(BuildType type) {
             buildType = type;
-        }
-
-        /**
-         * Returns the build type.  This is a required parameter.
-         */
-        public BuildType getBuildType() {
-            return buildType;
+            return this;
         }
 
         /**
          * Sets the directory where Incap should persist (and look for) its state files.
          * @param absolutePath a folder, which need not exist (incap will create it)
          */
-        public void setWorkingDir(File absolutePath) {
+        public Builder setWorkingDir(File absolutePath) {
             workingDir = absolutePath;
+            return this;
         }
 
         /**
          * Sets the classpath.  This is a required parameter.
          * @param classPath - must not be null
          */
-        public void setClassPath(List<File> classPath) {
+        public Builder setClassPath(List<File> classPath) {
             this.classPath = new ArrayList<>(classPath.size());
             this.classPath.addAll(classPath);
+            return this;
         }
 
         /**
          * Sets the sourcepath.  This is a required parameter.
          * @param sourcePath - must not be null
          */
-        public void setSourcePath(List<File> sourcePath) {
+        public Builder setSourcePath(List<File> sourcePath) {
             this.sourcePath = new ArrayList<>(sourcePath.size());
             this.sourcePath.addAll(sourcePath);
+            return this;
         }
 
         /**
@@ -134,16 +131,18 @@ public class BuildSpec {
          * @param changed the changed classes.  If specified, must not be null
          * but can be empty.
          */
-        public void setModifiedClasses(Set<String> changed) {
+        public Builder setModifiedClasses(Set<String> changed) {
             modifiedClasses = changed;
+            return this;
         }
 
         /**
          * Sets the deleted classes for incremental builds.  Optional parameter.
          * @param deleted if specified, must not be null (but can be empty)
          */
-        public void setDeletedClasses(Set<String> deleted) {
+        public Builder setDeletedClasses(Set<String> deleted) {
             deletedClasses = deleted;
+            return this;
         }
 
         /**
