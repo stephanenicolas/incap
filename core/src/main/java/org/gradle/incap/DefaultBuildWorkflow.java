@@ -13,7 +13,7 @@ public class DefaultBuildWorkflow implements BuildWorkflow {
   @Override
   public PreBuildResult preBuild(BuildSpec spec) {
     // TODO:  Read PG from disk, if necessary.
-    
+
     PreBuildResult result = new PreBuildResult() {
       @Override
       public PreBuildResultStatus status() {
@@ -31,6 +31,17 @@ public class DefaultBuildWorkflow implements BuildWorkflow {
   @Override
   public PostBuildResult postBuild() throws IOException {
     // TODO:  serialize PG
+    return new PostBuildResult() {
+      @Override
+      public PostBuildResultStatus status() {
+        return PostBuildResultStatus.SUCCESS;
+      }
+
+      @Override
+      public String message() {
+        return null;
+      }
+    };
   }
   
 }
