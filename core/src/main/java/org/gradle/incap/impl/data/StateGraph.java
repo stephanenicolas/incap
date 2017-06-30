@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import javax.lang.model.element.Element;
 
+import static com.sun.tools.doclint.Entity.ge;
+import static com.sun.tools.doclint.Entity.nu;
+
 public class StateGraph {
 
   private Set<InputFile> inputFiles = new HashSet<>();
@@ -42,8 +45,15 @@ public class StateGraph {
       addForwardEdge(generatedFile, originatingElements);
   }
 
-    private void addForwardEdge(GeneratedFile generatedFile, ElementEntry[] originatingElements) {
-        
+    private void addForwardEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
+        for (ElementEntry originatingElement : originatingElements) {
+            Set<GeneratedFile> elementEntries = mapElementToGeneratedFiles.get(originatingElement);
+            if (elementEntries == null) {
+                elementEntries = new HashSet<>();
+            }
+            elementEntries.add(generatedFile);
+            mapElementToGeneratedFiles.put(originatingElement, elementEntries);
+        }
     }
 
     private void addBackwardEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
