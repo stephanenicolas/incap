@@ -5,7 +5,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Name;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
+
+import static org.gradle.incap.impl.data.ElementUtils.enclosingTypeElement;
 
 public class StateGraph {
 
@@ -69,8 +73,9 @@ public class StateGraph {
     }
 
     private InputFile findInputFileForElement(Element element) {
-        // TODO - insert logic
-        return null;
+        TypeElement enclosingTypeElement = ElementUtils.enclosingTypeElement(element);
+        String className = enclosingTypeElement.getSimpleName().toString();
+        return new InputFile(className);
     }
 
     private void addForwardEdgeFromElementToGeneratedFiles(GeneratedFile generatedFile, ElementEntry... originatingElements) {
