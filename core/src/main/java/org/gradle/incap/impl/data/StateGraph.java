@@ -42,10 +42,38 @@ public class StateGraph {
 
   /* package-private*/ void addGenerationEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
     addBackwardEdge(generatedFile, originatingElements);
+      addBackwardEdgeFromElementToInputFiles(originatingElements);
     addForwardEdge(generatedFile, originatingElements);
+      addForwardEdgeFromInputToElements(originatingElements);
   }
 
-  private void addForwardEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
+    private void addForwardEdgeFromInputToElements(ElementEntry... originatingElements) {
+        for (ElementEntry elementEntry : originatingElements) {
+            InputFile inputFile = findInputFileForElement(elementEntry.getElement());
+
+            Set<ElementEntry> existingElementEntries = mapInputToElements.get(inputFile);
+            if (existingElementEntries == null) {
+                existingElementEntries = new HashSet<>();
+            }
+
+            existingElementEntries.add(elementEntry);
+
+            mapInputToElements.put(inputFile, existingElementEntries);
+        }
+    }
+
+    private void addBackwardEdgeFromElementToInputFiles(ElementEntry... originatingElements) {
+        for (ElementEntry elementEntry : originatingElements) {
+            mapElementToInputFiles.put(elementEntry, findInputFileForElement(elementEntry.getElement()));
+        }
+    }
+
+    private InputFile findInputFileForElement(Element element) {
+        // TODO - insert logic
+        return null;
+    }
+
+    private void addForwardEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
     for (ElementEntry originatingElement : originatingElements) {
       Set<GeneratedFile> elementEntries = mapElementToGeneratedFiles.get(originatingElement);
       if (elementEntries == null) {
