@@ -30,12 +30,6 @@ public class StateGraph {
   }
 
   /* package-private*/ void addGenerationEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
-    Set<ElementEntry> originatingElementEntries = new HashSet<>();
-    for (Element originatingElement : originatingElements) {
-      originatingElementEntries.add(new ElementEntry(originatingElement));
-    }
-
-    mapGeneratedFileToElements.put(generatedFile, originatingElementEntries);
   }
 
 }
