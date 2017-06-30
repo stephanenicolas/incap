@@ -41,9 +41,9 @@ public class StateGraph {
   }
 
   /* package-private*/ void addGenerationEdge(GeneratedFile generatedFile, ElementEntry... originatingElements) {
-    addBackwardEdgeFromGeneratedFileToElements(generatedFile, originatingElements);
+      addBackwardEdgeFromGeneratedFileToElements(generatedFile, originatingElements);
       addBackwardEdgeFromElementToInputFiles(originatingElements);
-    addForwardEdgeFromElementToGeneratedFiles(generatedFile, originatingElements);
+      addForwardEdgeFromElementToGeneratedFiles(generatedFile, originatingElements);
       addForwardEdgeFromInputToElements(originatingElements);
   }
 

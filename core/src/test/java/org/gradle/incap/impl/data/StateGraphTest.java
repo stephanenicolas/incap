@@ -2,10 +2,11 @@ package org.gradle.incap.impl.data;
 
 import java.util.Set;
 import javax.lang.model.util.Elements;
-import org.easymock.EasyMock;
 
+import static org.easymock.EasyMock.createMock;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.hasItems;
+import static org.junit.Assert.assertThat;
 
 public class StateGraphTest {
 
@@ -14,7 +15,7 @@ public class StateGraphTest {
   @org.junit.Test
   public void testAddGenerationEdge_shouldReturnSingleParticipatingElement() throws Exception {
     //GIVEN
-    Elements mockElements = EasyMock.createMock(Elements.class);
+    Elements mockElements = createMock(Elements.class);
     stateGraphUnderTest = new StateGraph(mockElements);
     GeneratedFile generatedFile = new GeneratedSourceFile("foo");
     ElementEntry entry1 = new ElementEntry("");
@@ -30,11 +31,11 @@ public class StateGraphTest {
   @org.junit.Test
   public void testAddGenerationEdge_shouldReturnSingleParticipatingElements() throws Exception {
     //GIVEN
-    Elements mockElements = EasyMock.createMock(Elements.class);
+    Elements mockElements = createMock(Elements.class);
     stateGraphUnderTest = new StateGraph(mockElements);
     GeneratedFile generatedFile = new GeneratedSourceFile("foo");
-    ElementEntry entry1 = new ElementEntry("");
-    ElementEntry entry2 = new ElementEntry("");
+    ElementEntry entry1 = new ElementEntry("abc");
+    ElementEntry entry2 = new ElementEntry("bcd");
 
     //WHEN
     stateGraphUnderTest.addGenerationEdge(generatedFile, entry1, entry2);
@@ -42,5 +43,6 @@ public class StateGraphTest {
 
     //THEN
     assertThat(participatingElementEntries.size(), is(2));
+    assertThat(participatingElementEntries, hasItems(entry1, entry2));
   }
 }

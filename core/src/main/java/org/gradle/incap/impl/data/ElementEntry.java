@@ -30,4 +30,19 @@ public class ElementEntry {
   private Element lookupElement(String eqlPath) {
     return null;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    ElementEntry that = (ElementEntry) o;
+
+    return eqlPath.equals(that.eqlPath);
+  }
+
+  @Override
+  public int hashCode() {
+    return eqlPath.hashCode();
+  }
 }
