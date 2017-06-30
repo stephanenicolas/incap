@@ -9,4 +9,5 @@ configurations {
 }
 
 dependencies {
+  testCompile deps.junit
 }

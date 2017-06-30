@@ -1,14 +1,10 @@
 package org.gradle.incap.impl.data;
 
-import java.util.List;
-import javax.lang.model.element.Element;
-
 public class GeneratedSourceFile extends GeneratedFile {
     private CharSequence name;
 
-    public GeneratedSourceFile(CharSequence name, List<Element> originatingElements) {
+    public GeneratedSourceFile(CharSequence name) {
         this.name = name;
-        this.originatingElements = originatingElements;
     }
 
     public CharSequence getName() {

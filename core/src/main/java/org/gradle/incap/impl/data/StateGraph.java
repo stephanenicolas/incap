@@ -27,7 +27,7 @@ public class StateGraph {
    * @param originatingElements
    */
   public void addSourceFile(CharSequence name, Element... originatingElements) {
-    GeneratedFile generatedFile = new GeneratedSourceFile(name, Arrays.asList(originatingElements));
+    GeneratedFile generatedFile = new GeneratedSourceFile(name);
 
     ElementEntry[] originatingElementEntries = new ElementEntry[originatingElements.length];
     for (int i = 0; i < originatingElementEntries.length; i++) {
@@ -54,4 +54,17 @@ public class StateGraph {
 
         mapGeneratedFileToElements.put(generatedFile, originatingElementEntries);
     }
+
+  public Set<Element> getParticipatingElements(GeneratedFile generatedFile) {
+    Set<ElementEntry> participatingElementEntries = getParticipatingElementEntries(generatedFile);
+    Set<Element> elements = new HashSet<>();
+    for (ElementEntry participatingElementEntry : participatingElementEntries) {
+      elements.add(participatingElementEntry.getElement());
+    }
+    return elements;
+  }
+
+  public Set<ElementEntry> getParticipatingElementEntries(GeneratedFile generatedFile) {
+    return mapGeneratedFileToElements.get(generatedFile);
+  }
 }

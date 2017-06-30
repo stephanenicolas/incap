@@ -14,7 +14,15 @@ public class ElementEntry {
     this.eqlPath = generateEqlPath(element);
   }
 
+  public ElementEntry(String eqlPath) {
+    this.eqlPath = eqlPath;
+  }
+
   private String generateEqlPath(Element element) {
     return null;
+  }
+
+  public Element getElement() {
+    return element;
   }
 }
