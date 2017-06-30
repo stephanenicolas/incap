@@ -4,6 +4,10 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 
+/**
+ * The following code is copied from NetBeans
+ * http://grepcode.com/file/bits.netbeans.org/maven2/org.netbeans.api/org-netbeans-modules-java-source/RELEASE68/org/netbeans/api/java/source/ElementUtilities.java#129
+ */
 public class ElementUtils {
     public static TypeElement enclosingTypeElement(Element element) throws IllegalArgumentException {
         return enclosingTypeElementImpl(element);
