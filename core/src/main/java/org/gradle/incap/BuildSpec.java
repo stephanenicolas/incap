@@ -18,8 +18,8 @@ public class BuildSpec {
     private File workingDir;
     private List<File> classPath;
     private List<File> sourcePath;
-    private Set<File> modifiedFiles;
-    private Set<File> deletedFiles;
+    private Set<String> modifiedClasses;
+    private Set<String> deletedClasses;
 
     private BuildSpec() {
     }
@@ -57,19 +57,24 @@ public class BuildSpec {
     }
 
     /**
-     * For incremental build specs, this is the list of added and modified files.
-     * @return an immutable list of the full paths to any modified (source) files.
+     * For incremental build specs, this is the list of modified classes.
+     * @return an immutable list of the fully qualified names of any modified
+     * classes, including from jars which may have changed.  Note that
+     * the build system does not specify <em>added</em> classes, because
+     * they have not been compiled yet.  But they are also not in the state
+     * graph yet, so Incap does not need them.
      */
-    public Set<File> getModifiedFiles() {
-        return modifiedFiles;
+    public Set<String> getModifiedClasses() {
+        return modifiedClasses;
     }
 
     /**
-     * For incremental build specs, this is the list of deleted files.
-     * @return an immutable list of the full paths to any deleted (source) files.
+     * For incremental build specs, this is the list of deleted classes.
+     * @return an immutable list of the fully qualified names of classes that
+     * were deleted.
      */
-    public Set<File> getDeletedFiles() {
-        return deletedFiles;
+    public Set<String> getDeletedClasses() {
+        return deletedClasses;
     }
 
     /**
@@ -81,8 +86,8 @@ public class BuildSpec {
         private File workingDir;
         private List<File> classPath;
         private List<File> sourcePath;
-        private Set<File> modifiedFiles;
-        private Set<File> deletedFiles;
+        private Set<String> modifiedClasses;
+        private Set<String> deletedClasses;
 
         /**
          * Sets the build type.  This is a required parameter.
@@ -125,20 +130,20 @@ public class BuildSpec {
         }
 
         /**
-         * Sets the modified files.  Optional parameter.
-         * @param changed the changed files.  If specified, must not be null
+         * Sets the modified classes.  Optional parameter.
+         * @param changed the changed classes.  If specified, must not be null
          * but can be empty.
          */
-        public void setModifiedFiles(Set<File> changed) {
-            modifiedFiles = changed;
+        public void setModifiedClasses(Set<String> changed) {
+            modifiedClasses = changed;
         }
 
         /**
-         * Sets the deleted files for incremental builds.  Optional parameter.
+         * Sets the deleted classes for incremental builds.  Optional parameter.
          * @param deleted if specified, must not be null (but can be empty)
          */
-        public void setDeletedFiles(Set<File> deleted) {
-            deletedFiles = deleted;
+        public void setDeletedClasses(Set<String> deleted) {
+            deletedClasses = deleted;
         }
 
         /**
@@ -165,11 +170,11 @@ public class BuildSpec {
             spec.classPath = classPath != null ? classPath : Collections.EMPTY_LIST;
             spec.sourcePath = sourcePath != null ? sourcePath : Collections.EMPTY_LIST;
 
-            spec.modifiedFiles = modifiedFiles != null
-                    ? Collections.unmodifiableSet(modifiedFiles) : Collections.EMPTY_SET;
+            spec.modifiedClasses = modifiedClasses != null
+                    ? Collections.unmodifiableSet(modifiedClasses) : Collections.EMPTY_SET;
 
-            spec.deletedFiles = deletedFiles != null
-                    ? Collections.unmodifiableSet(deletedFiles) : Collections.EMPTY_SET;
+            spec.deletedClasses = deletedClasses != null
+                    ? Collections.unmodifiableSet(deletedClasses) : Collections.EMPTY_SET;
 
             return spec;
         }
