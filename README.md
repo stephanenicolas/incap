@@ -9,3 +9,5 @@ Testing for incremental DI
 1. use the script `tools/install-gradle.rb`
 1. use the incremental compiler option in your build
 1. compile using: `~/gradle-source-build/bin/gradle :app:compileJava -d`
+
+We are currently using this gradle fork to work: https://www.github.com/gstevey/gradle
