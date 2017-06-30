@@ -1,6 +1,6 @@
 package org.gradle.incap.impl.data;
 
-import java.util.Arrays;
+import com.gradle.incap.AnnotationFinder;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
