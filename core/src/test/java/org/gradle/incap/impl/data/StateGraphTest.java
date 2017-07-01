@@ -3,9 +3,12 @@ package org.gradle.incap.impl.data;
 import com.gradle.incap.AnnotationFinder;
 import com.gradle.incap.AnnotationPathEncoder;
 import java.util.Set;
-import javax.lang.model.util.Elements;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
@@ -19,9 +22,13 @@ public class StateGraphTest {
     //GIVEN
     AnnotationFinder mockAnnotationFinder = createMock(AnnotationFinder.class);
     AnnotationPathEncoder mockAnnotationPathEncoder= createMock(AnnotationPathEncoder.class);
-    stateGraphUnderTest = new StateGraph(mockAnnotationFinder, mockAnnotationPathEncoder);
-    GeneratedFile generatedFile = new GeneratedSourceFile("foo");
+    InputFileFinder mockInputFileFinder= createMock(InputFileFinder.class);
+    InputFile inputFile = new InputFile("Foo.class");
+    expect(mockInputFileFinder.findInputFileForElement(anyObject())).andReturn(inputFile).times(2);
+    stateGraphUnderTest = new StateGraph(mockAnnotationFinder, mockAnnotationPathEncoder, mockInputFileFinder);
+    GeneratedFile generatedFile = new GeneratedSourceFile("GeneratedFoo");
     ElementEntry entry1 = new ElementEntry("");
+    replay(mockAnnotationFinder, mockAnnotationPathEncoder, mockInputFileFinder);
 
     //WHEN
     stateGraphUnderTest.addGenerationEdge(generatedFile, entry1);
@@ -29,6 +36,7 @@ public class StateGraphTest {
 
     //THEN
     assertThat(participatingElementEntries.size(), is(1));
+    verify(mockAnnotationFinder, mockAnnotationPathEncoder, mockInputFileFinder);
   }
 
   @org.junit.Test
@@ -36,10 +44,14 @@ public class StateGraphTest {
     //GIVEN
     AnnotationFinder mockAnnotationFinder = createMock(AnnotationFinder.class);
     AnnotationPathEncoder mockAnnotationPathEncoder= createMock(AnnotationPathEncoder.class);
-    stateGraphUnderTest = new StateGraph(mockAnnotationFinder, mockAnnotationPathEncoder);
-    GeneratedFile generatedFile = new GeneratedSourceFile("foo");
+    InputFileFinder mockInputFileFinder= createMock(InputFileFinder.class);
+    InputFile inputFile = new InputFile("Foo.class");
+    expect(mockInputFileFinder.findInputFileForElement(anyObject())).andReturn(inputFile).times(4);
+    stateGraphUnderTest = new StateGraph(mockAnnotationFinder, mockAnnotationPathEncoder, mockInputFileFinder);
+    GeneratedFile generatedFile = new GeneratedSourceFile("GeneratedFoo");
     ElementEntry entry1 = new ElementEntry("abc");
     ElementEntry entry2 = new ElementEntry("bcd");
+    replay(mockAnnotationFinder, mockAnnotationPathEncoder, mockInputFileFinder);
 
     //WHEN
     stateGraphUnderTest.addGenerationEdge(generatedFile, entry1, entry2);
@@ -48,5 +60,6 @@ public class StateGraphTest {
     //THEN
     assertThat(participatingElementEntries.size(), is(2));
     assertThat(participatingElementEntries, hasItems(entry1, entry2));
+    verify(mockAnnotationFinder, mockAnnotationPathEncoder, mockInputFileFinder);
   }
 }

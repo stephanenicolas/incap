@@ -25,11 +25,12 @@ public class StateGraph {
   private Map<ElementEntry, InputFile> mapElementToInputFiles = new HashMap<>();
   private final AnnotationFinder annotationFinder;
   private final AnnotationPathEncoder annotationPathEncoder;
+  private final InputFileFinder inputFileFinder;
 
-  public StateGraph(AnnotationFinder annotationFinder,
-      AnnotationPathEncoder annotationPathEncoder) {
+  public StateGraph(AnnotationFinder annotationFinder, AnnotationPathEncoder annotationPathEncoder, InputFileFinder inputFileFinder) {
     this.annotationFinder = annotationFinder;
     this.annotationPathEncoder = annotationPathEncoder;
+    this.inputFileFinder = inputFileFinder;
   }
 
   /**
@@ -58,7 +59,7 @@ public class StateGraph {
 
     private void addForwardEdgeFromInputToElements(ElementEntry... originatingElements) {
         for (ElementEntry elementEntry : originatingElements) {
-            InputFile inputFile = findInputFileForElement(elementEntry.getElement());
+            InputFile inputFile = inputFileFinder.findInputFileForElement(elementEntry.getElement());
 
             Set<ElementEntry> existingElementEntries = mapInputToElements.get(inputFile);
             if (existingElementEntries == null) {
@@ -73,17 +74,8 @@ public class StateGraph {
 
     private void addBackwardEdgeFromElementToInputFiles(ElementEntry... originatingElements) {
         for (ElementEntry elementEntry : originatingElements) {
-            mapElementToInputFiles.put(elementEntry, findInputFileForElement(elementEntry.getElement()));
+            mapElementToInputFiles.put(elementEntry, inputFileFinder.findInputFileForElement(elementEntry.getElement()));
         }
-    }
-
-    private InputFile findInputFileForElement(Element element) {
-        System.out.println("findInputFileForElement: " + element);
-        System.out.println("findInputFileForElement kind: " + element.getKind().toString());
-        TypeElement enclosingTypeElement = ElementUtils.enclosingTypeElement(element);
-        System.out.println("findInputFileForElement enclosingTypeElement: " + enclosingTypeElement);
-        String className = enclosingTypeElement.getSimpleName().toString();
-        return new InputFile(className);
     }
 
     private void addForwardEdgeFromElementToGeneratedFiles(GeneratedFile generatedFile, ElementEntry... originatingElements) {

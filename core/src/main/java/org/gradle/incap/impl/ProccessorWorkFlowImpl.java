@@ -15,6 +15,7 @@ import org.gradle.incap.IncrementalFiler;
 import org.gradle.incap.ProcessorWorkflow;
 import org.gradle.incap.impl.data.ElementEntry;
 import org.gradle.incap.impl.data.GeneratedFile;
+import org.gradle.incap.impl.data.InputFileFinder;
 import org.gradle.incap.impl.data.StateGraph;
 
 public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
@@ -25,7 +26,6 @@ public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
   private AnnotationPathEncoder annotationPathEncoder;
   private Filer filer;
   private Elements elementUtils;
-  private Messager messager;
 
   @Override
   public boolean isIncremental() {
@@ -35,10 +35,10 @@ public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
   @Override
   public IncrementalFiler init(ProcessingEnvironment processingEnv) {
     filer = processingEnv.getFiler();
-    messager = processingEnv.getMessager();
+    elementUtils = processingEnv.getElementUtils();
     annotationFinder = new AnnotationFinder(elementUtils);
     annotationPathEncoder = new AnnotationPathEncoder();
-    stateGraph = new StateGraph(annotationFinder, annotationPathEncoder);
+    stateGraph = new StateGraph(annotationFinder, annotationPathEncoder, new InputFileFinder());
     return new IncrementalFiler(filer);
   }
 
