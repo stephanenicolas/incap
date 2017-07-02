@@ -7,4 +7,8 @@ public class InputFile {
   public InputFile(String name) {
     this.name = name;
   }
+
+  public String getName() {
+    return name;
+  }
 }

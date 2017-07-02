@@ -10,7 +10,10 @@ configurations {
 
 dependencies {
   compile project(':element-query-language')
+  testCompile project( ":annotations" )
   testCompile deps.junit
   testCompile deps.easymock
   testCompile deps.hamcrest
+  testCompile deps.truth
+  testCompile deps.compiletesting
 }
