@@ -26,6 +26,7 @@ public class Processor1 extends AbstractProcessor {
 
     private IncrementalFiler incrementalFiler;
     private ProcessorWorkflow processorWorkflow;
+    private boolean isProcessingDone;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -54,6 +55,10 @@ public class Processor1 extends AbstractProcessor {
             System.out.println("Processing annotation:" + annotation);
         }
 
+        if(isProcessingDone) {
+            return false;
+        }
+
         // generates a class with a constant that contains the name of all classes containing an annotation.
         Set<? extends Element> elementsAnnotatedWith = roundEnv.getElementsAnnotatedWith(Annotation1.class);
         Set<String> nameOfClassesContainingAnnotation1 = new HashSet<>();
@@ -78,6 +83,7 @@ public class Processor1 extends AbstractProcessor {
                 printWriter.close();
             }
         }
+        isProcessingDone = true;
         return false;
     }
 
