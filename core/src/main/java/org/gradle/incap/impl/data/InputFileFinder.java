@@ -8,7 +8,7 @@ public class InputFileFinder {
 
     public InputFile findInputFileForElement(Element element) {
         TypeElement enclosingTypeElement = enclosingTypeElement(element);
-        String className = enclosingTypeElement.getSimpleName().toString();
+        String className = enclosingTypeElement.getQualifiedName().toString();
         return new InputFile(className);
     }
 
