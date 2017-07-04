@@ -21,47 +21,53 @@ import javax.lang.model.element.Element;
 import javax.tools.FileObject;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
-import org.gradle.incap.impl.data.StateGraph;
 
 /**
- * Replacement/proxy for the {@code javax.annotation.processing.Filer} passed
- * by the non-incremental processing toolchain (typically, {@code javac} or {@code apt}).
- * Conformant Annotation Processors (APs) must use the {@code IncrementalFiler} for
- * all their file operations. <p>
+ * Replacement/proxy for the {@code javax.annotation.processing.Filer} passed by the non-incremental
+ * processing toolchain (typically, {@code javac} or {@code apt}). Conformant Annotation Processors
+ * (APs) must use the {@code IncrementalFiler} for all their file operations.
  *
- * This works more or less identically to {@code Filer}, but for correct operation,
- * the Annotation Processor <em>must</em> supply one or more originating {@code Element}s
- * for each generated target file.  They are not optional, and the API will throw a runtime
- * exception if the AP fails to provide them for a given output.
+ * <p>This works more or less identically to {@code Filer}, but for correct operation, the
+ * Annotation Processor <em>must</em> supply one or more originating {@code Element}s for each
+ * generated target file. They are not optional, and the API will throw a runtime exception if the
+ * AP fails to provide them for a given output.
  */
 public class IncrementalFiler implements Filer {
 
-  private Filer filer;
+    private Filer filer;
 
-  public IncrementalFiler(Filer filer) {
-    this.filer = filer;
-  }
+    public IncrementalFiler(Filer filer) {
+        this.filer = filer;
+    }
 
-  @Override
-  public JavaFileObject createSourceFile(CharSequence name, Element... originatingElements) throws IOException {
-    ProcessorWorkflow processorWorkflow = Incap.getProcessorWorkflow();
-    processorWorkflow.getStateGraph().addSourceFile(name, originatingElements);
-    return filer.createSourceFile(name, originatingElements);
-  }
+    @Override
+    public JavaFileObject createSourceFile(CharSequence name, Element... originatingElements)
+            throws IOException {
+        ProcessorWorkflow processorWorkflow = Incap.getProcessorWorkflow();
+        processorWorkflow.getStateGraph().addSourceFile(name, originatingElements);
+        return filer.createSourceFile(name, originatingElements);
+    }
 
-  @Override
-  public JavaFileObject createClassFile(CharSequence name, Element... originatingElements) throws IOException {
-    return filer.createClassFile(name, originatingElements);
-  }
+    @Override
+    public JavaFileObject createClassFile(CharSequence name, Element... originatingElements)
+            throws IOException {
+        return filer.createClassFile(name, originatingElements);
+    }
 
-  @Override
-  public FileObject createResource(JavaFileManager.Location location, CharSequence pkg, CharSequence relativeName, Element... originatingElements)
-      throws IOException {
-    return filer.createResource(location, pkg, relativeName, originatingElements);
-  }
+    @Override
+    public FileObject createResource(
+            JavaFileManager.Location location,
+            CharSequence pkg,
+            CharSequence relativeName,
+            Element... originatingElements)
+            throws IOException {
+        return filer.createResource(location, pkg, relativeName, originatingElements);
+    }
 
-  @Override
-  public FileObject getResource(JavaFileManager.Location location, CharSequence pkg, CharSequence relativeName) throws IOException {
-    return filer.getResource(location, pkg, relativeName);
-  }
+    @Override
+    public FileObject getResource(
+            JavaFileManager.Location location, CharSequence pkg, CharSequence relativeName)
+            throws IOException {
+        return filer.getResource(location, pkg, relativeName);
+    }
 }

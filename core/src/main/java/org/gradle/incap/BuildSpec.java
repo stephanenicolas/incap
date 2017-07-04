@@ -3,16 +3,16 @@ package org.gradle.incap;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Encapsulates information about an in-progress build.
- */
+/** Encapsulates information about an in-progress build. */
 public class BuildSpec {
 
-    public enum BuildType {FULL, INCREMENTAL}
+    public enum BuildType {
+        FULL,
+        INCREMENTAL
+    }
 
     private BuildType buildType;
     private File workingDir;
@@ -21,20 +21,18 @@ public class BuildSpec {
     private Set<String> modifiedClasses;
     private Set<String> deletedClasses;
 
-    private BuildSpec() {
-    }
+    private BuildSpec() {}
 
-    /**
-     * Returns the build type set for this build.
-     */
+    /** Returns the build type set for this build. */
     public BuildType getBuildType() {
         return buildType;
     }
 
     /**
      * Returns the incap working directory, specified by the build system.
-     * @return the absolute path to the folder.  It may not exist if incap
-     *         has not created any state yet.
+     *
+     * @return the absolute path to the folder. It may not exist if incap has not created any state
+     *     yet.
      */
     public File getWorkingDir() {
         return workingDir;
@@ -42,6 +40,7 @@ public class BuildSpec {
 
     /**
      * Returns the classpath set by the build system.
+     *
      * @return the immutable classpath
      */
     public List<File> getClassPath() {
@@ -50,7 +49,8 @@ public class BuildSpec {
 
     /**
      * Returns the source path, which is optionally set by the build system.
-     * @return the immutable source path.  May be empty if not set.
+     *
+     * @return the immutable source path. May be empty if not set.
      */
     public List<File> getSourcePath() {
         return sourcePath;
@@ -58,11 +58,11 @@ public class BuildSpec {
 
     /**
      * For incremental build specs, this is the list of modified classes.
-     * @return an immutable list of the fully qualified names of any modified
-     * classes, including from jars which may have changed.  Note that
-     * the build system does not specify <em>added</em> classes, because
-     * they have not been compiled yet.  But they are also not in the state
-     * graph yet, so Incap does not need them.
+     *
+     * @return an immutable list of the fully qualified names of any modified classes, including
+     *     from jars which may have changed. Note that the build system does not specify
+     *     <em>added</em> classes, because they have not been compiled yet. But they are also not in
+     *     the state graph yet, so Incap does not need them.
      */
     public Set<String> getModifiedClasses() {
         return modifiedClasses;
@@ -70,16 +70,14 @@ public class BuildSpec {
 
     /**
      * For incremental build specs, this is the list of deleted classes.
-     * @return an immutable list of the fully qualified names of classes that
-     * were deleted.
+     *
+     * @return an immutable list of the fully qualified names of classes that were deleted.
      */
     public Set<String> getDeletedClasses() {
         return deletedClasses;
     }
 
-    /**
-     * Builder class for {@code BuildSpec}.
-     */
+    /** Builder class for {@code BuildSpec}. */
     public static class Builder {
 
         private BuildType buildType;
@@ -89,9 +87,7 @@ public class BuildSpec {
         private Set<String> modifiedClasses;
         private Set<String> deletedClasses;
 
-        /**
-         * Sets the build type.  This is a required parameter.
-         */
+        /** Sets the build type. This is a required parameter. */
         public Builder setBuildType(BuildType type) {
             buildType = type;
             return this;
@@ -99,6 +95,7 @@ public class BuildSpec {
 
         /**
          * Sets the directory where Incap should persist (and look for) its state files.
+         *
          * @param absolutePath a folder, which need not exist (incap will create it)
          */
         public Builder setWorkingDir(File absolutePath) {
@@ -107,7 +104,8 @@ public class BuildSpec {
         }
 
         /**
-         * Sets the classpath.  This is a required parameter.
+         * Sets the classpath. This is a required parameter.
+         *
          * @param classPath - must not be null
          */
         public Builder setClassPath(List<File> classPath) {
@@ -117,7 +115,8 @@ public class BuildSpec {
         }
 
         /**
-         * Sets the sourcepath.  This is a required parameter.
+         * Sets the sourcepath. This is a required parameter.
+         *
          * @param sourcePath - must not be null
          */
         public Builder setSourcePath(List<File> sourcePath) {
@@ -127,9 +126,9 @@ public class BuildSpec {
         }
 
         /**
-         * Sets the modified classes.  Optional parameter.
-         * @param changed the changed classes.  If specified, must not be null
-         * but can be empty.
+         * Sets the modified classes. Optional parameter.
+         *
+         * @param changed the changed classes. If specified, must not be null but can be empty.
          */
         public Builder setModifiedClasses(Set<String> changed) {
             modifiedClasses = changed;
@@ -137,7 +136,8 @@ public class BuildSpec {
         }
 
         /**
-         * Sets the deleted classes for incremental builds.  Optional parameter.
+         * Sets the deleted classes for incremental builds. Optional parameter.
+         *
          * @param deleted if specified, must not be null (but can be empty)
          */
         public Builder setDeletedClasses(Set<String> deleted) {
@@ -169,11 +169,15 @@ public class BuildSpec {
             spec.classPath = classPath != null ? classPath : Collections.EMPTY_LIST;
             spec.sourcePath = sourcePath != null ? sourcePath : Collections.EMPTY_LIST;
 
-            spec.modifiedClasses = modifiedClasses != null
-                    ? Collections.unmodifiableSet(modifiedClasses) : Collections.EMPTY_SET;
+            spec.modifiedClasses =
+                    modifiedClasses != null
+                            ? Collections.unmodifiableSet(modifiedClasses)
+                            : Collections.EMPTY_SET;
 
-            spec.deletedClasses = deletedClasses != null
-                    ? Collections.unmodifiableSet(deletedClasses) : Collections.EMPTY_SET;
+            spec.deletedClasses =
+                    deletedClasses != null
+                            ? Collections.unmodifiableSet(deletedClasses)
+                            : Collections.EMPTY_SET;
 
             return spec;
         }
