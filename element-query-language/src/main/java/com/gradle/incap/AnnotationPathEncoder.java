@@ -25,15 +25,14 @@ public class AnnotationPathEncoder {
                 .toString();
     }
 
-  public String encodeClass(Element classElement) {
-    System.out.println(" classElement annotated with: " + classElement);
+    public String encodeClass(Element classElement) {
+        System.out.println(" classElement annotated with: " + classElement);
 
-    final String className = classElement.toString();
-    return new StringBuilder()
-        .append(LOCATOR_CLASS)
-        .append(SEPARATOR)
-        .append(className)
-        .toString();
-  }
-
+        final String className = classElement.toString();
+        return new StringBuilder()
+                .append(LOCATOR_CLASS)
+                .append(SEPARATOR)
+                .append(className)
+                .toString();
+    }
 }

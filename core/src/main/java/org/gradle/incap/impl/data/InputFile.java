@@ -2,13 +2,13 @@ package org.gradle.incap.impl.data;
 
 public class InputFile {
 
-  private String name;
+    private String name;
 
-  public InputFile(String name) {
-    this.name = name;
-  }
+    public InputFile(String name) {
+        this.name = name;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 }

@@ -12,17 +12,17 @@ public class InputFileFinder {
         return new InputFile(className);
     }
 
-    private TypeElement enclosingTypeElement( Element element ) {
+    private TypeElement enclosingTypeElement(Element element) {
 
-        if( element.getKind() == ElementKind.PACKAGE ) {
+        if (element.getKind() == ElementKind.PACKAGE) {
             throw new IllegalArgumentException();
         }
 
-        while(element != null && !isType(element)) {
+        while (element != null && !isType(element)) {
             element = element.getEnclosingElement();
         }
 
-        return (TypeElement)element;
+        return (TypeElement) element;
     }
 
     private static boolean isType(Element element) {

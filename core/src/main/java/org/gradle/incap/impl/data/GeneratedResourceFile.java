@@ -7,7 +7,8 @@ public class GeneratedResourceFile extends GeneratedFile {
     private CharSequence pkg;
     private CharSequence relativeName;
 
-    public GeneratedResourceFile(JavaFileManager.Location location, CharSequence pkg, CharSequence relativeName) {
+    public GeneratedResourceFile(
+            JavaFileManager.Location location, CharSequence pkg, CharSequence relativeName) {
         this.location = location;
         this.pkg = pkg;
         this.relativeName = relativeName;

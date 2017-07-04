@@ -55,23 +55,27 @@ public class Processor1 extends AbstractProcessor {
             System.out.println("Processing annotation:" + annotation);
         }
 
-        if(isProcessingDone) {
+        if (isProcessingDone) {
             return false;
         }
 
         // generates a class with a constant that contains the name of all classes containing an annotation.
-        Set<? extends Element> elementsAnnotatedWith = roundEnv.getElementsAnnotatedWith(Annotation1.class);
+        Set<? extends Element> elementsAnnotatedWith =
+                roundEnv.getElementsAnnotatedWith(Annotation1.class);
         Set<String> nameOfClassesContainingAnnotation1 = new HashSet<>();
         processElements(elementsAnnotatedWith, nameOfClassesContainingAnnotation1);
 
         String generatedClassName = "GeneratedFoo";
         GeneratedFile generatedFile = new GeneratedSourceFile(generatedClassName);
-        Set<Element> participatingElements = processorWorkflow.getParticipatingElements(generatedFile);
+        Set<Element> participatingElements =
+                processorWorkflow.getParticipatingElements(generatedFile);
         processElements(participatingElements, nameOfClassesContainingAnnotation1);
 
         PrintWriter printWriter = null;
         try {
-            JavaFileObject generatedObjectFile = incrementalFiler.createSourceFile(generatedClassName, toArray(elementsAnnotatedWith));
+            JavaFileObject generatedObjectFile =
+                    incrementalFiler.createSourceFile(
+                            generatedClassName, toArray(elementsAnnotatedWith));
             Writer writer = generatedObjectFile.openWriter();
             printWriter = new PrintWriter(writer);
             String javaString = brewJava(generatedClassName, nameOfClassesContainingAnnotation1);
@@ -79,7 +83,7 @@ public class Processor1 extends AbstractProcessor {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if(printWriter != null) {
+            if (printWriter != null) {
                 printWriter.close();
             }
         }
@@ -87,7 +91,9 @@ public class Processor1 extends AbstractProcessor {
         return false;
     }
 
-    private void processElements(Set<? extends Element> elementsAnnotatedWith, Set<String> nameOfClassesContainingAnnotation1) {
+    private void processElements(
+            Set<? extends Element> elementsAnnotatedWith,
+            Set<String> nameOfClassesContainingAnnotation1) {
         for (Element elementWithAnnotation1 : elementsAnnotatedWith) {
             nameOfClassesContainingAnnotation1.add(getEnclosingClassName(elementWithAnnotation1));
         }
