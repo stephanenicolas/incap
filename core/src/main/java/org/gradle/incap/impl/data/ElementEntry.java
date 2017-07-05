@@ -1,8 +1,9 @@
 package org.gradle.incap.impl.data;
 
+import java.io.Serializable;
 import javax.lang.model.element.Element;
 
-public class ElementEntry {
+public class ElementEntry implements Serializable {
 
     private Element element;
     private String eqlPath;

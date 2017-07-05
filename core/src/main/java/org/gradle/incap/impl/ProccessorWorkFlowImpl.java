@@ -37,7 +37,7 @@ public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
         elementUtils = processingEnv.getElementUtils();
         annotationFinder = new AnnotationFinder(elementUtils);
         annotationPathEncoder = new AnnotationPathEncoder();
-        stateGraph = new StateGraph(annotationFinder, annotationPathEncoder, new InputFileFinder());
+        stateGraph = new StateGraph(annotationPathEncoder, new InputFileFinder());
         return new IncrementalFiler(filer);
     }
 

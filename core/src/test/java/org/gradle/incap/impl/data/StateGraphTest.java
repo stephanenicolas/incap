@@ -1,5 +1,10 @@
 package org.gradle.incap.impl.data;
 
+import com.gradle.incap.AnnotationFinder;
+import com.gradle.incap.AnnotationPathEncoder;
+import java.util.Set;
+import javax.lang.model.element.Element;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -8,11 +13,6 @@ import static org.easymock.EasyMock.verify;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
-
-import com.gradle.incap.AnnotationFinder;
-import com.gradle.incap.AnnotationPathEncoder;
-import java.util.Set;
-import javax.lang.model.element.Element;
 
 public class StateGraphTest {
 
@@ -30,7 +30,7 @@ public class StateGraphTest {
                 .times(2);
         stateGraphUnderTest =
                 new StateGraph(
-                        mockAnnotationFinder, mockAnnotationPathEncoder, mockInputFileFinder);
+                        mockAnnotationPathEncoder, mockInputFileFinder);
         GeneratedFile generatedFile = new GeneratedSourceFile("GeneratedFoo");
         ElementEntry entry1 = new ElementEntry("");
         replay(mockAnnotationFinder, mockAnnotationPathEncoder, mockInputFileFinder);
@@ -57,7 +57,7 @@ public class StateGraphTest {
                 .times(4);
         stateGraphUnderTest =
                 new StateGraph(
-                        mockAnnotationFinder, mockAnnotationPathEncoder, mockInputFileFinder);
+                        mockAnnotationPathEncoder, mockInputFileFinder);
         GeneratedFile generatedFile = new GeneratedSourceFile("GeneratedFoo");
         ElementEntry entry1 = new ElementEntry("abc");
         ElementEntry entry2 = new ElementEntry("bcd");

@@ -1,6 +1,8 @@
 package org.gradle.incap.impl.data;
 
-public abstract class GeneratedFile {
+import java.io.Serializable;
+
+public abstract class GeneratedFile implements Serializable {
     public enum GeneratedFileType {
         SOURCE,
         CLASS,
