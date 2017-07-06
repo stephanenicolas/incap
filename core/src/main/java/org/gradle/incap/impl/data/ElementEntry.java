@@ -5,7 +5,7 @@ import javax.lang.model.element.Element;
 
 public class ElementEntry implements Serializable {
 
-    private Element element;
+    transient private Element element;
     private String eqlPath;
 
     public ElementEntry(Element element, String eqlPath) {

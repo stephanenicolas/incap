@@ -1,5 +1,8 @@
 package org.gradle.incap.impl.utils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -10,15 +13,18 @@ import org.gradle.incap.impl.data.GeneratedFile;
 import org.gradle.incap.impl.data.GeneratedSourceFile;
 import org.gradle.incap.impl.data.InputFile;
 import org.gradle.incap.impl.data.StateGraph;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class StateGraphUtilsTest {
-    @org.junit.Test
+    private StateGraphUtils stateGraphUtils = new StateGraphUtils();
+
+    @Test
     public void testSaveReadStateGraph() {
         StateGraph stateGraph = createStageGraph();
-        StateGraphUtils.saveToFile(stateGraph);
-        StateGraph generatedStateGraphFromFile = StateGraphUtils.readFromFile();
+        stateGraphUtils.saveToFile(stateGraph);
+        StateGraph generatedStateGraphFromFile = stateGraphUtils.readFromFile();
 
         Map<InputFile, Set<ElementEntry>> expectedInputToElementEdges = stateGraph.getMapInputToElements();
         Map<InputFile, Set<ElementEntry>> generatedInputToElementEdges = generatedStateGraphFromFile.getMapInputToElements();
@@ -58,6 +64,13 @@ public class StateGraphUtilsTest {
             Map.Entry<ElementEntry, InputFile> generatedEntrySet = generatedElementToInputFilesEdgesIterator.next();
             assertEquals(expectedEntrySet.getKey(), generatedEntrySet.getKey());
             assertEquals(expectedEntrySet.getValue(), generatedEntrySet.getValue());
+        }
+
+        // clean up generated stateGraph.txt
+        try {
+            Files.deleteIfExists(Paths.get(StateGraphUtils.STATE_GRAPH_FILE_PATH));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

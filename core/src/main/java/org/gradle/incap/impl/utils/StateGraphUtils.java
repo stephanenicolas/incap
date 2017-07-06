@@ -1,6 +1,7 @@
 package org.gradle.incap.impl.utils;
 
 import com.gradle.incap.LogWrapper;
+import java.io.Closeable;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,20 +9,26 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import org.gradle.incap.impl.data.StateGraph;
 
-public final class StateGraphUtils {
-    private static final String STATE_GRAPH_FILE_PATH = "stateGraph.txt";
+public class StateGraphUtils {
+    protected static final String STATE_GRAPH_FILE_PATH = "stateGraph.txt";
 
-    public static void saveToFile(StateGraph stateGraph) {
+    public void saveToFile(StateGraph stateGraph) {
         if (stateGraph == null) {
             LogWrapper.log("state graph is null");
             return;
         }
+
+        FileOutputStream fileOutputStream = null;
+        ObjectOutputStream objectOutputStream = null;
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(STATE_GRAPH_FILE_PATH);
-            ObjectOutputStream oos = new ObjectOutputStream(fileOutputStream);
-            oos.writeObject(stateGraph);
+            fileOutputStream = new FileOutputStream(STATE_GRAPH_FILE_PATH);
+            objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(stateGraph);
         } catch (IOException e) {
             handleErrorSavingStateGraph(e);
+        } finally {
+            close(objectOutputStream);
+            close(fileOutputStream);
         }
     }
 
@@ -30,15 +37,33 @@ public final class StateGraphUtils {
         e.printStackTrace();
     }
 
-    public static StateGraph readFromFile() {
+    private static void close(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            }
+            catch (IOException e) {
+                LogWrapper.log("Error closing closeable " + closeable);
+            }
+        }
+    }
+
+    public StateGraph readFromFile() {
         StateGraph stateGraph = null;
+        FileInputStream fileInputStream = null;
+        ObjectInputStream objectInputStream = null;
+
         try {
-            FileInputStream fileInputStream = new FileInputStream(STATE_GRAPH_FILE_PATH);
-            ObjectInputStream ois = new ObjectInputStream(fileInputStream);
-            stateGraph = (StateGraph) ois.readObject();
+            fileInputStream = new FileInputStream(STATE_GRAPH_FILE_PATH);
+            objectInputStream = new ObjectInputStream(fileInputStream);
+            stateGraph = (StateGraph) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             handleErrorReadingStateGraph(e);
+        } finally {
+            close(objectInputStream);
+            close(fileInputStream);
         }
+
         return stateGraph;
     }
 
