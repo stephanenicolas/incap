@@ -30,4 +30,34 @@ public class GeneratedResourceFile extends GeneratedFile {
     public GeneratedFileType getType() {
         return GeneratedFileType.RESOURCE;
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+            .append(location.toString())
+            .append(pkg.toString())
+            .append(relativeName.toString())
+            .toString();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + location.hashCode();
+        result = 31 * result + pkg.hashCode();
+        result = 31 * result + relativeName.hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GeneratedResourceFile that = (GeneratedResourceFile) o;
+
+        return location.equals(that.location) &&
+            pkg.equals(that.pkg) &&
+            relativeName.equals(that.relativeName);
+    }
 }
