@@ -42,7 +42,6 @@ public class OneToOneAPTest {
         .compilesWithoutError()
         .and()
         .generatesSources(expected);
-
   }
 
 }
