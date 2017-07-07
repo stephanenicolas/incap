@@ -1,12 +1,12 @@
 apply plugin: 'java'
 
 dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
-}
-
-dependencies {
   compile project(':annotations')
   compile project(':core')
+
+  testCompile deps.junit
+  testCompile deps.truth
+  testCompile deps.compiletesting
 }
 
 sourceCompatibility = "1.8"
