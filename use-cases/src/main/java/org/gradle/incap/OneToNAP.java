@@ -19,9 +19,9 @@ import static org.gradle.incap.util.APUtil.generateFiles;
 import static org.gradle.incap.util.APUtil.getEnclosingClassName;
 
 /**
- * This AP creates 1 target file for 1 source file.
+ * This AP creates N target files for 1.
  */
-public class OneToOneAP extends AbstractProcessor {
+public class OneToNAP extends AbstractProcessor {
 
   private IncrementalFiler incrementalFiler;
   private ProcessorWorkflow processorWorkflow;
@@ -70,8 +70,10 @@ public class OneToOneAP extends AbstractProcessor {
     final Map<String, Set<Element>> mapGeneratedFileNameToOrginatingElements = new HashMap<>();
     for (Element annotatedElement : annotatedElements) {
       String nameOfClassContainingElement = getEnclosingClassName(annotatedElement);
-      final String finalClassName = getClass().getSimpleName() + "_" + nameOfClassContainingElement + "Gen0";
-      mapGeneratedFileNameToOrginatingElements.put(finalClassName, Collections.singleton(annotatedElement));
+      final String finalClassName0 = getClass().getSimpleName() + "_" + nameOfClassContainingElement + "Gen0";
+      mapGeneratedFileNameToOrginatingElements.put(finalClassName0, Collections.singleton(annotatedElement));
+      final String finalClassName1 = getClass().getSimpleName() + "_" + nameOfClassContainingElement + "Gen1";
+      mapGeneratedFileNameToOrginatingElements.put(finalClassName1, Collections.singleton(annotatedElement));
     }
     return mapGeneratedFileNameToOrginatingElements;
   }
