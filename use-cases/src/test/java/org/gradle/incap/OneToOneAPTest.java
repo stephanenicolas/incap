@@ -1,7 +1,6 @@
 package org.gradle.incap;
 
 import static com.google.testing.compile.JavaFileObjects.forSourceString;
-import static org.junit.Assert.*;
 
 import com.google.common.truth.Truth;
 import com.google.testing.compile.JavaSourceSubjectFactory;

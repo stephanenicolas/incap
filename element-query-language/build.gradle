@@ -19,4 +19,6 @@ dependencies {
   testCompile deps.junit
   testCompile deps.truth
   testCompile deps.compiletesting
+  // From https://github.com/google/compile-testing/issues/28
+  testCompile files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
 }
