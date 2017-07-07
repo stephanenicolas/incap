@@ -1,9 +1,15 @@
 apply plugin: 'java'
 
+repositories {
+  mavenCentral()
+  jcenter()
+}
+
 dependencies {
   compile project(':annotations')
   compile project(':core')
 
+  testCompile project(':annotations')
   testCompile deps.junit
   testCompile deps.truth
   testCompile deps.compiletesting
