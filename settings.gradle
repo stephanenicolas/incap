@@ -1,5 +1,6 @@
 include ':annotations'
 include ':processor1'
+include ':use-cases'
 include ':element-query-language'
 include ':app'
 include ':core'
