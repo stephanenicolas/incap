@@ -68,6 +68,11 @@ public class ProccessorWorkFlowImpl implements ProcessorWorkflow {
         return stateGraph;
     }
 
+    //only for testing
+    public void setStateGraph(StateGraph stateGraph) {
+        this.stateGraph = stateGraph;
+    }
+
     @Override
     public IncrementalFiler createIncrementalFiler(Filer filer) {
         return new IncrementalFiler(filer);
