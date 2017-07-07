@@ -18,7 +18,7 @@ public class APUtil {
   }
 
   public static String getEnclosingClassName(Element elementWithAnnotation) {
-    return elementWithAnnotation.toString();
+    return elementWithAnnotation.getSimpleName().toString();
   }
 
   private static String brewJava(String targetClassName) {

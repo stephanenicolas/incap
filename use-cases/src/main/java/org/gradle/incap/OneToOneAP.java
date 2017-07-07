@@ -67,7 +67,7 @@ public class OneToOneAP extends AbstractProcessor {
     final Map<String, Set<Element>> mapGeneratedFileNameToOrginatingElements = new HashMap<>();
     for (Element annotatedElement : annotatedElements) {
       String nameOfClassContainingElement = getEnclosingClassName(annotatedElement);
-      final String finalClassName = getClass().getSimpleName() + "_" + nameOfClassContainingElement;
+      final String finalClassName = getClass().getSimpleName() + "_" + nameOfClassContainingElement + "Gen0";
       mapGeneratedFileNameToOrginatingElements.put(finalClassName, Collections.singleton(annotatedElement));
     }
     return mapGeneratedFileNameToOrginatingElements;

@@ -11,10 +11,10 @@ import org.junit.Test;
 public class OneToOneAPTest {
 
   private JavaFileObject source;
+  private JavaFileObject expected;
 
   @Test
   public void testOneToOneAP_creates_GeneratedFile_WhenSingleFileToProcess() {
-    //GIVEN
     //GIVEN
     source =
         forSourceString(
@@ -22,16 +22,27 @@ public class OneToOneAPTest {
             "" //
                 + "package test;\n" //
                 + "import org.gradle.incap.Annotation1;\n" //
+                + "@Annotation1\n" //
                 + "public class Test {\n" //
-                + "  @Annotation1 String foo;\n" //
                 + "}");
+    expected =
+        forSourceString(
+            "OneToOneAP_TestGen0",
+            "" //
+                + "\n" //
+                + "public class OneToOneAP_TestGen0 {\n" //
+                + "}");
+
     //WHEN
     //THEN
     Truth.assertAbout(JavaSourceSubjectFactory.javaSource())
         .that(source) //
         .withCompilerOptions("-Xlint:-processing") //
         .processedWith(new OneToOneAP()) //
-        .compilesWithoutError();
+        .compilesWithoutError()
+        .and()
+        .generatesSources(expected);
+
   }
 
 }
