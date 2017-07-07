@@ -21,7 +21,7 @@ public class InputFileFinderTest {
                         "test.Test",
                         "" //
                                 + "package test;\n" //
-                                + "import Annotation1;\n" //
+                                + "import org.gradle.incap.Annotation1;\n" //
                                 + "public class Test {\n" //
                                 + "  @Annotation1 String foo;\n" //
                                 + "}");
@@ -42,7 +42,7 @@ public class InputFileFinderTest {
                         "test.Test",
                         "" //
                                 + "package test;\n" //
-                                + "import Annotation1;\n" //
+                                + "import org.gradle.incap.Annotation1;\n" //
                                 + "public class Test {\n" //
                                 + "  @Annotation1 void foo() {}\n" //
                                 + "}");
@@ -63,7 +63,7 @@ public class InputFileFinderTest {
                         "test.Test",
                         "" //
                                 + "package test;\n" //
-                                + "import Annotation1;\n" //
+                                + "import org.gradle.incap.Annotation1;\n" //
                                 + "@Annotation1\n" //
                                 + "public class Test {\n" //
                                 + "}");
