@@ -19,13 +19,13 @@ public class AnnotationPathEncoderTest {
     @Test
     public void testEncodeAnnotationOnField() {
         //GIVEN
-        expected = "af:test.Test:foo:Annotation1";
+        expected = "af:test.Test:foo:org.gradle.incap.Annotation1";
         source =
                 forSourceString(
                         "test.Test",
                         "" //
                                 + "package test;\n" //
-                                + "import Annotation1;\n" //
+                                + "import org.gradle.incap.Annotation1;\n" //
                                 + "public class Test {\n" //
                                 + "  @Annotation1 String foo;\n" //
                                 + "}");

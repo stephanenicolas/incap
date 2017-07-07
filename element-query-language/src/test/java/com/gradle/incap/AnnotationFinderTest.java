@@ -19,13 +19,13 @@ public class AnnotationFinderTest {
     @Test
     public void testQueryAnnotationOnField() {
         //GIVEN
-        query = "af:test.Test:foo:Annotation1";
+        query = "af:test.Test:foo:org.gradle.incap.Annotation1";
         source =
                 forSourceString(
                         "test.Test",
                         "" //
                                 + "package test;\n" //
-                                + "import Annotation1;\n" //
+                                + "import org.gradle.incap.Annotation1;\n" //
                                 + "public class Test {\n" //
                                 + "  @Annotation1 String foo;\n" //
                                 + "}");
@@ -35,6 +35,6 @@ public class AnnotationFinderTest {
 
         //THEN
         assertThat(element, notNullValue());
-        assertThat(element.toString(), is("Annotation1"));
+        assertThat(element.toString(), is("org.gradle.incap.Annotation1"));
     }
 }
