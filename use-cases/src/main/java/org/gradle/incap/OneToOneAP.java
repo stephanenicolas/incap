@@ -1,4 +1,4 @@
-package com.example;
+package org.gradle.incap;
 
 import static java.lang.String.format;
 import static javax.lang.model.SourceVersion.latestSupported;
@@ -61,33 +61,31 @@ public class OneToOneAP extends AbstractProcessor {
 
         // generates a class with a constant that contains the name of all classes containing an annotation.
         Set<? extends Element> elementsAnnotatedWith =
-            roundEnv.getElementsAnnotatedWith(OneToOneAP.class);
+            roundEnv.getElementsAnnotatedWith(Annotation1.class);
         
         Set<String> nameOfClassesContainingAnnotation1 = new HashSet<>();
         processElements(elementsAnnotatedWith, nameOfClassesContainingAnnotation1);
 
-        String generatedClassName = "GeneratedFoo";
-        GeneratedFile generatedFile = new GeneratedSourceFile(generatedClassName);
-        Set<Element> participatingElements =
-            processorWorkflow.getParticipatingElements(generatedFile);
-        processElements(participatingElements, nameOfClassesContainingAnnotation1);
-
-        PrintWriter printWriter = null;
-        try {
-            JavaFileObject generatedObjectFile =
-                incrementalFiler.createSourceFile(
-                    generatedClassName, toArray(elementsAnnotatedWith));
-            Writer writer = generatedObjectFile.openWriter();
-            printWriter = new PrintWriter(writer);
-            String javaString = brewJava(generatedClassName, nameOfClassesContainingAnnotation1);
-            printWriter.append(javaString);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (printWriter != null) {
-                printWriter.close();
+        for (String className : nameOfClassesContainingAnnotation1) {
+            String generatedClassName = "APOneToOne_" + className + "Gen0";
+            PrintWriter printWriter = null;
+            try {
+                JavaFileObject generatedObjectFile =
+                    incrementalFiler.createSourceFile(
+                        generatedClassName, toArray(elementsAnnotatedWith));
+                Writer writer = generatedObjectFile.openWriter();
+                printWriter = new PrintWriter(writer);
+                String javaString = brewJava(generatedClassName);
+                printWriter.append(javaString);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (printWriter != null) {
+                    printWriter.close();
+                }
             }
         }
+
         isProcessingDone = true;
         return false;
     }
@@ -115,16 +113,9 @@ public class OneToOneAP extends AbstractProcessor {
         return elementWithAnnotation1.toString();
     }
 
-    private String brewJava(String className, Set<String> annotatedClassNames) {
+    private String brewJava(String className) {
         StringBuilder builder = new StringBuilder();
         builder.append(format("public class %s {\n", className));
-
-        builder.append(tab(2) + "private static final String[] classNames = new String[] {\n");
-        for (String annotatedClassName : annotatedClassNames) {
-            builder.append(tab(4) + format("\"%s\",\n", annotatedClassName));
-        }
-        builder.append(tab(2) + "};\n");
-
         builder.append("}");
         return builder.toString();
     }

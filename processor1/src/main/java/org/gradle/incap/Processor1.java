@@ -1,4 +1,4 @@
-package com.example;
+package org.gradle.incap;
 
 import static java.lang.String.format;
 import static javax.lang.model.SourceVersion.latestSupported;
@@ -17,8 +17,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
-import org.gradle.incap.IncrementalFiler;
-import org.gradle.incap.ProcessorWorkflow;
 import org.gradle.incap.impl.data.GeneratedFile;
 import org.gradle.incap.impl.data.GeneratedSourceFile;
 

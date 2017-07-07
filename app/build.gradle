@@ -28,4 +28,4 @@ compileJava {
   options.incremental = true
 }
 
-mainClassName = "com.example.Main"
+mainClassName = "Main"

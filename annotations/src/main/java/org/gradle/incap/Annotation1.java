@@ -1,4 +1,4 @@
-package com.example;
+package org.gradle.incap;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 

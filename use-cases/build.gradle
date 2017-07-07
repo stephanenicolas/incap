@@ -4,5 +4,10 @@ dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
+dependencies {
+  compile project(':annotations')
+  compile project(':core')
+}
+
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
