@@ -3,11 +3,13 @@ package org.gradle.incap;
 import static java.lang.String.format;
 import static javax.lang.model.SourceVersion.latestSupported;
 import static org.gradle.incap.Incap.*;
+import static org.gradle.incap.util.APUtil.*;
+import static org.gradle.incap.util.APUtil.generateFile;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -16,11 +18,6 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.tools.JavaFileObject;
-import org.gradle.incap.IncrementalFiler;
-import org.gradle.incap.ProcessorWorkflow;
-import org.gradle.incap.impl.data.GeneratedFile;
-import org.gradle.incap.impl.data.GeneratedSourceFile;
 
 public class OneToOneAP extends AbstractProcessor {
 
@@ -40,7 +37,7 @@ public class OneToOneAP extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> set = new HashSet<>();
-        set.add(OneToOneAP.class.getName());
+        set.add(Annotation1.class.getName());
         return set;
     }
 
@@ -60,71 +57,21 @@ public class OneToOneAP extends AbstractProcessor {
         }
 
         // generates a class with a constant that contains the name of all classes containing an annotation.
-        Set<? extends Element> elementsAnnotatedWith =
-            roundEnv.getElementsAnnotatedWith(Annotation1.class);
-        
-        Set<String> nameOfClassesContainingAnnotation1 = new HashSet<>();
-        processElements(elementsAnnotatedWith, nameOfClassesContainingAnnotation1);
-
-        for (String className : nameOfClassesContainingAnnotation1) {
-            String generatedClassName = "APOneToOne_" + className + "Gen0";
-            PrintWriter printWriter = null;
-            try {
-                JavaFileObject generatedObjectFile =
-                    incrementalFiler.createSourceFile(
-                        generatedClassName, toArray(elementsAnnotatedWith));
-                Writer writer = generatedObjectFile.openWriter();
-                printWriter = new PrintWriter(writer);
-                String javaString = brewJava(generatedClassName);
-                printWriter.append(javaString);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (printWriter != null) {
-                    printWriter.close();
-                }
-            }
-        }
-
+        Set<? extends Element> annotatedElements = roundEnv.getElementsAnnotatedWith(Annotation1.class);
+        Map<String, Set<Element>> mapGeneratedFileNameToOriginatingElements = processElements(annotatedElements);
+        generateFiles(incrementalFiler, mapGeneratedFileNameToOriginatingElements);
         isProcessingDone = true;
         return false;
     }
 
-    private void processElements(
-        Set<? extends Element> elementsAnnotatedWith,
-        Set<String> nameOfClassesContainingAnnotation1) {
-        for (Element elementWithAnnotation1 : elementsAnnotatedWith) {
-            nameOfClassesContainingAnnotation1.add(getEnclosingClassName(elementWithAnnotation1));
+    private Map<String, Set<Element>> processElements(Set<? extends Element> annotatedElements) {
+        final Map<String, Set<Element>> mapGeneratedFileNameToOrginatingElements = new HashMap<>();
+        for (Element annotatedElement : annotatedElements) {
+            String nameOfClassContainingElement = getEnclosingClassName(annotatedElement);
+            final String finalClassName = getClass().getSimpleName() + "_" + nameOfClassContainingElement;
+            mapGeneratedFileNameToOrginatingElements.put(finalClassName, Collections.singleton(annotatedElement));
         }
+        return mapGeneratedFileNameToOrginatingElements;
     }
 
-    private Element[] toArray(Set<? extends Element> elementsAnnotatedWith) {
-        Element[] result = new Element[elementsAnnotatedWith.size()];
-        int index = 0;
-        for (Element element : elementsAnnotatedWith) {
-            System.out.println("element: " + element);
-            result[index++] = element;
-        }
-
-        return result;
-    }
-
-    private String getEnclosingClassName(Element elementWithAnnotation1) {
-        return elementWithAnnotation1.toString();
-    }
-
-    private String brewJava(String className) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(format("public class %s {\n", className));
-        builder.append("}");
-        return builder.toString();
-    }
-
-    private String tab(int len) {
-        StringBuilder builder = new StringBuilder();
-        for (int space = 0; space < len; space++) {
-            builder.append(' ');
-        }
-        return builder.toString();
-    }
 }
