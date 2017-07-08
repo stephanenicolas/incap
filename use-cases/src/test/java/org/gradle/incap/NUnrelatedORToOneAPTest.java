@@ -18,9 +18,9 @@ public class NUnrelatedORToOneAPTest {
             + "@Annotation1\n" //
             + "public class Test {\n" //
             + "}");
-    JavaFileObject expected0 = forSourceString("NUnrelatedORToOneAP_Test_Gen0", "" //
+    JavaFileObject expected0 = forSourceString("NUnrelatedORToOneAP_OR_Gen0", "" //
             + "\n" //
-            + "public class NUnrelatedORToOneAP_Test_Gen0 {\n" //
+            + "public class NUnrelatedORToOneAP_OR_Gen0 {\n" //
             + "}");
 
     //WHEN
@@ -46,9 +46,9 @@ public class NUnrelatedORToOneAPTest {
         + "@Annotation1\n" //
         + "class Test1 {\n" //
         + "}");
-    JavaFileObject expected = forSourceString("NUnrelatedORToOneAP_Test0_Test1_Gen0", "" //
+    JavaFileObject expected = forSourceString("NUnrelatedORToOneAP_OR_Gen0", "" //
         + "\n" //
-        + "public class NUnrelatedORToOneAP_Test0_Test1_Gen0 {\n" //
+        + "public class NUnrelatedORToOneAP_OR_Gen0 {\n" //
         + "}");
 
     //WHEN
