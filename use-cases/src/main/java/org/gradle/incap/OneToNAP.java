@@ -20,6 +20,10 @@ import static org.gradle.incap.util.APUtil.getEnclosingClassName;
 
 /**
  * This AP creates N target files for 1.
+ * This case should be easy to handle as we actually don't need incap at all,
+ * the processor is already incremental and the filer will provide the build
+ * system information about generated files that should be deleted when their
+ * corresponding input file is deleted.
  */
 public class OneToNAP extends AbstractProcessor {
 

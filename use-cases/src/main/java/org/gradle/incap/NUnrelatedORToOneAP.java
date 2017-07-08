@@ -21,6 +21,16 @@ import static org.gradle.incap.util.APUtil.generateFiles;
  * Related means that we can retrieve the other files from one of them.
  * Here there are ***not*** related.
  * This AP will generate a file if at least one annotation is present.
+ *
+ * This case is not so easy to handle and will need incap.
+ * The processor is not incremental by itself and needs the information from incap
+ * to retrieve all participating files/elements before generating
+ * a given target file.
+ * With Milestone 1 (when incap re-passes to javac all source files), the AP will
+ * work but will basically re-do a full processing.
+ * With Milestone 2 (when incap will retrieve the elements of a FB), this AP
+ * will get faster as it will rely on incap to retrieve annotated elements
+ * for a given file and will be faster than with Milestone 1.
  */
 public class NUnrelatedORToOneAP extends AbstractProcessor {
 
