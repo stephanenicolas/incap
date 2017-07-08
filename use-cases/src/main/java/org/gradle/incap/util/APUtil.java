@@ -28,10 +28,10 @@ public class APUtil {
         .toString();
   }
 
-  public static void generateFiles(Filer filer, Map<String, Set<Element>> mapGeneratedFileNameToOriginatingElements) {
-    for (Map.Entry<String, Set<Element>> entryFileNameToOriginatingElements : mapGeneratedFileNameToOriginatingElements.entrySet()) {
+  public static void generateFiles(Filer filer, Map<String, Set<? extends Element>> mapGeneratedFileNameToOriginatingElements) {
+    for (Map.Entry<String, Set<? extends Element>> entryFileNameToOriginatingElements : mapGeneratedFileNameToOriginatingElements.entrySet()) {
       String generatedFileName = entryFileNameToOriginatingElements.getKey();
-      Set<Element> originatingElements = entryFileNameToOriginatingElements.getValue();
+      Set<? extends Element> originatingElements = entryFileNameToOriginatingElements.getValue();
       generateFile(filer, generatedFileName, originatingElements);
     }
   }

@@ -1,6 +1,5 @@
 package org.gradle.incap;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,17 +15,18 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 
-import static java.util.Arrays.asList;
 import static javax.lang.model.SourceVersion.latestSupported;
 import static org.gradle.incap.Incap.getProcessorWorkflow;
 import static org.gradle.incap.util.APUtil.generateFiles;
 import static org.gradle.incap.util.APUtil.getEnclosingClassName;
 
 /**
- * This AP creates 1 target file for N related input files.
+ * This AP creates 1 target file for N unrelated input files.
  * Related means that we can retrieve the other files from one of them.
+ * Here there are ***not*** related.
+ * This AP will generate a file if at least one annotation is present.
  */
-public class NRelatedToOneAP extends AbstractProcessor {
+public class NUnrelatedORToOneAP extends AbstractProcessor {
 
   private IncrementalFiler incrementalFiler;
   private ProcessorWorkflow processorWorkflow;
@@ -73,23 +73,14 @@ public class NRelatedToOneAP extends AbstractProcessor {
 
   private Map<String, Set<? extends Element>> processElements(Set<? extends Element> annotatedElements) {
     final Map<String, Set<? extends Element>> mapGeneratedFileNameToOrginatingElements = new HashMap<>();
+    StringBuilder nameOfClassesContainingElement = new StringBuilder();
     for (Element annotatedElement : annotatedElements) {
       String nameOfClassContainingElement = getEnclosingClassName(annotatedElement);
-      final String finalClassName0 = getClass().getSimpleName() + "_" + nameOfClassContainingElement + "Gen0";
-        mapGeneratedFileNameToOrginatingElements.put(finalClassName0, Collections.singleton(annotatedElement));
-      TypeMirror superclass = ((TypeElement) annotatedElement).getSuperclass();
-      Element superClassAsElement = ((DeclaredType) superclass).asElement();
-      if(superClassAsElement.getAnnotation(Annotation1.class) != null) {
-        String nameOfSuperClassContainingElement = getEnclosingClassName(superClassAsElement);
-        final String finalClassName1 = getClass().getSimpleName() //
-            + "_" //
-            + nameOfClassContainingElement //
-            + "_" //
-            + nameOfSuperClassContainingElement //
-            + "Gen0";
-        mapGeneratedFileNameToOrginatingElements.put(finalClassName1, new HashSet<>(asList(annotatedElement, superClassAsElement)));
-      }
+      nameOfClassesContainingElement.append(nameOfClassContainingElement);
+      nameOfClassesContainingElement.append("_");
     }
+      final String finalClassName = getClass().getSimpleName() + "_" + nameOfClassesContainingElement + "Gen0";
+      mapGeneratedFileNameToOrginatingElements.put(finalClassName, annotatedElements);
     return mapGeneratedFileNameToOrginatingElements;
   }
 }

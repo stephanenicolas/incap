@@ -60,14 +60,14 @@ public class OneToOneAP extends AbstractProcessor {
 
     // generates a class with a constant that contains the name of all classes containing an annotation.
     Set<? extends Element> annotatedElements = roundEnv.getElementsAnnotatedWith(Annotation1.class);
-    Map<String, Set<Element>> mapGeneratedFileNameToOriginatingElements = processElements(annotatedElements);
+    Map<String, Set<? extends Element>> mapGeneratedFileNameToOriginatingElements = processElements(annotatedElements);
     generateFiles(incrementalFiler, mapGeneratedFileNameToOriginatingElements);
     isProcessingDone = true;
     return false;
   }
 
-  private Map<String, Set<Element>> processElements(Set<? extends Element> annotatedElements) {
-    final Map<String, Set<Element>> mapGeneratedFileNameToOrginatingElements = new HashMap<>();
+  private Map<String, Set<? extends Element>> processElements(Set<? extends Element> annotatedElements) {
+    final Map<String, Set<? extends Element>> mapGeneratedFileNameToOrginatingElements = new HashMap<>();
     for (Element annotatedElement : annotatedElements) {
       String nameOfClassContainingElement = getEnclosingClassName(annotatedElement);
       final String finalClassName = getClass().getSimpleName() + "_" + nameOfClassContainingElement + "Gen0";
