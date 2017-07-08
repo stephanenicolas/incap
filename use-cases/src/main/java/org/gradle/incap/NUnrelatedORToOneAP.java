@@ -79,8 +79,8 @@ public class NUnrelatedORToOneAP extends AbstractProcessor {
       nameOfClassesContainingElement.append(nameOfClassContainingElement);
       nameOfClassesContainingElement.append("_");
     }
-      final String finalClassName = getClass().getSimpleName() + "_" + nameOfClassesContainingElement + "Gen0";
-      mapGeneratedFileNameToOrginatingElements.put(finalClassName, annotatedElements);
+    final String finalClassName = getClass().getSimpleName() + "_" + nameOfClassesContainingElement + "Gen0";
+    mapGeneratedFileNameToOrginatingElements.put(finalClassName, annotatedElements);
     return mapGeneratedFileNameToOrginatingElements;
   }
 }
