@@ -13,25 +13,19 @@ public class NRelatedToOneAPTest {
   public void testNRelatedToOneAP_creates_GeneratedFiles_WhenSingleFileToProcess() {
     //GIVEN
     JavaFileObject source = forSourceString("test.Test", "" //
-            + "package test;\n" //
-            + "import org.gradle.incap.Annotation1;\n" //
-            + "@Annotation1\n" //
-            + "public class Test {\n" //
-            + "}");
-    JavaFileObject expected0 = forSourceString("NRelatedToOneAP_TestGen0", "" //
-            + "\n" //
-            + "public class NRelatedToOneAP_TestGen0 {\n" //
-            + "}");
+        + "package test;\n" //
+        + "import org.gradle.incap.Annotation1;\n" //
+        + "@Annotation1\n" //
+        + "public class Test {\n" //
+        + "}");
 
     //WHEN
     //THEN
-    Truth.assertAbout(JavaSourceSubjectFactory.javaSource())
-        .that(source) //
+    //we can't test that no files were generated, but we would need it.
+    Truth.assertAbout(JavaSourceSubjectFactory.javaSource()).that(source) //
         .withCompilerOptions("-Xlint:-processing") //
         .processedWith(new NRelatedToOneAP()) //
-        .compilesWithoutError()
-        .and()
-        .generatesSources(expected0);
+        .compilesWithoutError();
   }
 
   @Test
@@ -46,15 +40,6 @@ public class NRelatedToOneAPTest {
         + "@Annotation1\n" //
         + "class Test1 extends Test0{\n" //
         + "}");
-    JavaFileObject expected00 = forSourceString("NRelatedToOneAP_Test0Gen0", "" //
-        + "\n" //
-        + "public class NRelatedToOneAP_Test0Gen0 {\n" //
-        + "}");
-
-    JavaFileObject expected01 = forSourceString("NRelatedToOneAP_Test1Gen0", "" //
-        + "\n" //
-        + "public class NRelatedToOneAP_Test1Gen0 {\n" //
-        + "}");
     JavaFileObject expected10 = forSourceString("NRelatedToOneAP_Test1_Test0Gen0", "" //
         + "\n" //
         + "public class NRelatedToOneAP_Test1_Test0Gen0 {\n" //
@@ -62,13 +47,9 @@ public class NRelatedToOneAPTest {
 
     //WHEN
     //THEN
-    Truth.assertAbout(JavaSourceSubjectFactory.javaSource())
-        .that(source0) //
+    Truth.assertAbout(JavaSourceSubjectFactory.javaSource()).that(source0) //
         .withCompilerOptions("-Xlint:-processing") //
         .processedWith(new NRelatedToOneAP()) //
-        .compilesWithoutError()
-        .and()
-        .generatesSources(expected00, expected01, expected10);
+        .compilesWithoutError().and().generatesSources(expected10);
   }
-
 }

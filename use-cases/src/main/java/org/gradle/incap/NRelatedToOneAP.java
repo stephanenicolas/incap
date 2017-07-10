@@ -1,6 +1,5 @@
 package org.gradle.incap;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -83,19 +82,19 @@ public class NRelatedToOneAP extends AbstractProcessor {
     final Map<String, Set<? extends Element>> mapGeneratedFileNameToOrginatingElements = new HashMap<>();
     for (Element annotatedElement : annotatedElements) {
       String nameOfClassContainingElement = getEnclosingClassName(annotatedElement);
-      final String finalClassName0 = getClass().getSimpleName() + "_" + nameOfClassContainingElement + "Gen0";
-      mapGeneratedFileNameToOrginatingElements.put(finalClassName0, Collections.singleton(annotatedElement));
       TypeMirror superclass = ((TypeElement) annotatedElement).getSuperclass();
-      Element superClassAsElement = ((DeclaredType) superclass).asElement();
-      if (superClassAsElement.getAnnotation(Annotation1.class) != null) {
-        String nameOfSuperClassContainingElement = getEnclosingClassName(superClassAsElement);
-        final String finalClassName1 = getClass().getSimpleName() //
-            + "_" //
-            + nameOfClassContainingElement //
-            + "_" //
-            + nameOfSuperClassContainingElement //
-            + "Gen0";
-        mapGeneratedFileNameToOrginatingElements.put(finalClassName1, new HashSet<>(asList(annotatedElement, superClassAsElement)));
+      if (superclass != null) {
+        Element superClassAsElement = ((DeclaredType) superclass).asElement();
+        if (superClassAsElement.getAnnotation(Annotation1.class) != null) {
+          String nameOfSuperClassContainingElement = getEnclosingClassName(superClassAsElement);
+          final String finalClassName1 = getClass().getSimpleName() //
+              + "_" //
+              + nameOfClassContainingElement //
+              + "_" //
+              + nameOfSuperClassContainingElement //
+              + "Gen0";
+          mapGeneratedFileNameToOrginatingElements.put(finalClassName1, new HashSet<>(asList(annotatedElement, superClassAsElement)));
+        }
       }
     }
     return mapGeneratedFileNameToOrginatingElements;

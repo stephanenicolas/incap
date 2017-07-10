@@ -13,16 +13,15 @@ public class NUnrelatedANDToOneAPTest {
   public void testNUnrelatedANDToOneAP_creates_GeneratedFiles_WhenSingleFileToProcess() {
     //GIVEN
     JavaFileObject source = forSourceString("test.Test", "" //
-            + "package test;\n" //
-            + "import org.gradle.incap.Annotation1;\n" //
-            + "@Annotation1\n" //
-            + "public class Test {\n" //
-            + "}");
+        + "package test;\n" //
+        + "import org.gradle.incap.Annotation1;\n" //
+        + "@Annotation1\n" //
+        + "public class Test {\n" //
+        + "}");
 
     //WHEN
     //THEN
-    Truth.assertAbout(JavaSourceSubjectFactory.javaSource())
-        .that(source) //
+    Truth.assertAbout(JavaSourceSubjectFactory.javaSource()).that(source) //
         .withCompilerOptions("-Xlint:-processing") //
         .processedWith(new NUnrelatedANDToOneAP()) //
         .compilesWithoutError();
@@ -48,13 +47,9 @@ public class NUnrelatedANDToOneAPTest {
 
     //WHEN
     //THEN
-    Truth.assertAbout(JavaSourceSubjectFactory.javaSource())
-        .that(source0) //
+    Truth.assertAbout(JavaSourceSubjectFactory.javaSource()).that(source0) //
         .withCompilerOptions("-Xlint:-processing") //
         .processedWith(new NUnrelatedANDToOneAP()) //
-        .compilesWithoutError()
-        .and()
-        .generatesSources(expected);
+        .compilesWithoutError().and().generatesSources(expected);
   }
-
 }

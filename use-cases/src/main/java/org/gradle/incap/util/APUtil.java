@@ -6,7 +6,6 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.processing.Filer;
-import javax.annotation.processing.Processor;
 import javax.lang.model.element.Element;
 import javax.tools.JavaFileObject;
 
@@ -36,11 +35,10 @@ public class APUtil {
     }
   }
 
-  private static void generateFile(Filer filer, String targetClassName,
-      Set<? extends Element> originatingElements) {
+  private static void generateFile(Filer filer, String targetClassName, Set<? extends Element> originatingElements) {
     PrintWriter printWriter = null;
     try {
-      JavaFileObject generatedObjectFile = filer.createSourceFile(targetClassName, toArray(originatingElements));
+      JavaFileObject generatedObjectFile = filer.createSourceFile(targetClassName, originatingElements.toArray(new Element[0]));
       Writer writer = generatedObjectFile.openWriter();
       printWriter = new PrintWriter(writer);
       String javaString = APUtil.brewJava(targetClassName);
@@ -52,15 +50,5 @@ public class APUtil {
         printWriter.close();
       }
     }
-  }
-
-  private static Element[] toArray(Set<? extends Element> elementsAnnotatedWith) {
-    Element[] result = new Element[elementsAnnotatedWith.size()];
-    int index = 0;
-    for (Element element : elementsAnnotatedWith) {
-      result[index++] = element;
-    }
-
-    return result;
   }
 }

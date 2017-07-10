@@ -13,30 +13,27 @@ public class OneToNAPTest {
   public void testOneToNAP_creates_GeneratedFiles_WhenSingleFileToProcess() {
     //GIVEN
     JavaFileObject source = forSourceString("test.Test", "" //
-            + "package test;\n" //
-            + "import org.gradle.incap.Annotation1;\n" //
-            + "@Annotation1\n" //
-            + "public class Test {\n" //
-            + "}");
+        + "package test;\n" //
+        + "import org.gradle.incap.Annotation1;\n" //
+        + "@Annotation1\n" //
+        + "public class Test {\n" //
+        + "}");
     JavaFileObject expected0 = forSourceString("OneToNAP_TestGen0", "" //
-            + "\n" //
-            + "public class OneToNAP_TestGen0 {\n" //
-            + "}");
+        + "\n" //
+        + "public class OneToNAP_TestGen0 {\n" //
+        + "}");
 
     JavaFileObject expected1 = forSourceString("OneToNAP_TestGen1", "" //
-            + "\n" //
-            + "public class OneToNAP_TestGen1 {\n" //
-            + "}");
+        + "\n" //
+        + "public class OneToNAP_TestGen1 {\n" //
+        + "}");
 
     //WHEN
     //THEN
-    Truth.assertAbout(JavaSourceSubjectFactory.javaSource())
-        .that(source) //
+    Truth.assertAbout(JavaSourceSubjectFactory.javaSource()).that(source) //
         .withCompilerOptions("-Xlint:-processing") //
         .processedWith(new OneToNAP()) //
-        .compilesWithoutError()
-        .and()
-        .generatesSources(expected0, expected1);
+        .compilesWithoutError().and().generatesSources(expected0, expected1);
   }
 
   @Test
@@ -72,13 +69,9 @@ public class OneToNAPTest {
 
     //WHEN
     //THEN
-    Truth.assertAbout(JavaSourceSubjectFactory.javaSource())
-        .that(source0) //
+    Truth.assertAbout(JavaSourceSubjectFactory.javaSource()).that(source0) //
         .withCompilerOptions("-Xlint:-processing") //
         .processedWith(new OneToNAP()) //
-        .compilesWithoutError()
-        .and()
-        .generatesSources(expected00, expected01, expected10, expected11);
+        .compilesWithoutError().and().generatesSources(expected00, expected01, expected10, expected11);
   }
-
 }
