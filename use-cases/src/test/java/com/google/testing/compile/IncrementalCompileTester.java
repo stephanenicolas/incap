@@ -91,7 +91,6 @@ public class IncrementalCompileTester {
         }
       }
     }
-    ((ProccessorWorkFlowImpl) Incap.getProcessorWorkflow()).setStateGraph(stateGraph);
     Compilation compilation = compile(files, processors, options);
     this.stateGraph = Incap.getProcessorWorkflow().getStateGraph();
     return compilation;

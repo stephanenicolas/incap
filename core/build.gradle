@@ -15,5 +15,5 @@ dependencies {
   testCompile deps.easymock
   testCompile deps.hamcrest
   testCompile deps.truth
-  testCompile deps.compiletesting
+  testCompile deps.compiletesting_jdk7
 }
