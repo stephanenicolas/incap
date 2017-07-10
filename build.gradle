@@ -23,6 +23,29 @@ repositories {
   jcenter()
 }
 
+//from https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_cross_compilation
+assert hasProperty('java7Home') : "Set the property 'java7Home' in your your gradle.properties pointing to a Java 7 installation"
+def javaExecutablesPath = new File(java7Home, 'bin')
+def javaExecutables = [:].withDefault { execName ->
+  def executable = new File(javaExecutablesPath, execName)
+  assert executable.exists() : "There is no ${execName} executable in ${javaExecutablesPath}"
+  executable
+}
+tasks.withType(AbstractCompile) {
+  options.with {
+    fork = true
+    forkOptions.javaHome = file(java6Home)
+  }
+}
+tasks.withType(Javadoc) {
+  executable = javaExecutables.javadoc
+}
+tasks.withType(Test) {
+  executable = javaExecutables.java
+}
+tasks.withType(JavaExec) {
+  executable = javaExecutables.java
+}
 
 ext.deps = [// Common
             inject              : 'javax.inject:javax.inject:1',
