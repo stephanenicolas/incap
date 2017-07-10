@@ -13,6 +13,7 @@ dependencies {
   testCompile deps.hamcrest
   testCompile deps.truth
   testCompile deps.compiletesting_jdk7
+  testCompile deps.hamcrest
 }
 
 sourceCompatibility = '1.7'

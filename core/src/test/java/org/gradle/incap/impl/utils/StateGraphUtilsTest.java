@@ -1,11 +1,16 @@
 package org.gradle.incap.impl.utils;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import org.gradle.incap.impl.data.ElementEntry;
@@ -13,96 +18,81 @@ import org.gradle.incap.impl.data.GeneratedFile;
 import org.gradle.incap.impl.data.GeneratedSourceFile;
 import org.gradle.incap.impl.data.InputFile;
 import org.gradle.incap.impl.data.StateGraph;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
-import static org.junit.Assert.assertEquals;
+import static org.gradle.incap.impl.utils.StateGraphMatcher.assertEquals;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class StateGraphUtilsTest {
-    private StateGraphUtils stateGraphUtils = new StateGraphUtils();
+  private StateGraphUtils stateGraphUtils = new StateGraphUtils();
 
-    @Test
-    public void testSaveReadStateGraph() {
-        StateGraph stateGraph = createStageGraph();
-        stateGraphUtils.saveToFile(stateGraph);
-        StateGraph generatedStateGraphFromFile = stateGraphUtils.readFromFile();
+  @Rule public TemporaryFolder folder = new TemporaryFolder();
 
-        Map<InputFile, Set<ElementEntry>> expectedInputToElementEdges = stateGraph.getMapInputToElements();
-        Map<InputFile, Set<ElementEntry>> generatedInputToElementEdges = generatedStateGraphFromFile.getMapInputToElements();
-        assertEquals(expectedInputToElementEdges.size(), generatedInputToElementEdges.size());
-        Iterator<Map.Entry<InputFile, Set<ElementEntry>>> generatedInputToElementEdgesIterator = generatedInputToElementEdges.entrySet().iterator();
-        for (Map.Entry<InputFile, Set<ElementEntry>> expectedEntrySet : expectedInputToElementEdges.entrySet()) {
-            Map.Entry<InputFile, Set<ElementEntry>> generatedEntrySet = generatedInputToElementEdgesIterator.next();
-            assertEquals(expectedEntrySet.getKey(), generatedEntrySet.getKey());
-            assertEquals(expectedEntrySet.getValue(), generatedEntrySet.getValue());
-        }
+  @Test
+  public void testSaveReadStateGraph() throws IOException, ClassNotFoundException {
+    File stateGraphFile = folder.newFile("stateGraph.ser");
+    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(stateGraphFile));
+    StateGraph stateGraph = createStageGraph();
+    stateGraphUtils.saveToStream(objectOutputStream, stateGraph);
+    objectOutputStream.close();
 
-        Map<ElementEntry, Set<GeneratedFile>> expectedElementToGeneratedFileEdges = stateGraph.getMapElementToGeneratedFiles();
-        Map<ElementEntry, Set<GeneratedFile>> generatedElementToGeneratedFileEdges = generatedStateGraphFromFile.getMapElementToGeneratedFiles();
-        assertEquals(expectedElementToGeneratedFileEdges.size(), generatedElementToGeneratedFileEdges.size());
-        Iterator<Map.Entry<ElementEntry, Set<GeneratedFile>>> generatedElementToGeneratedFileEdgeIterator = generatedElementToGeneratedFileEdges.entrySet().iterator();
-        for (Map.Entry<ElementEntry, Set<GeneratedFile>> expectedEntrySet : expectedElementToGeneratedFileEdges.entrySet()) {
-            Map.Entry<ElementEntry, Set<GeneratedFile>> generatedEntrySet = generatedElementToGeneratedFileEdgeIterator.next();
-            assertEquals(expectedEntrySet.getKey(), generatedEntrySet.getKey());
-            assertEquals(expectedEntrySet.getValue(), generatedEntrySet.getValue());
-        }
+    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(stateGraphFile));
+    StateGraph stateGraphFromFile = stateGraphUtils.readFromStream(objectInputStream);
 
-        Map<GeneratedFile, Set<ElementEntry>> expectedGeneratedFileToElementEdges = stateGraph.getMapGeneratedFileToElements();
-        Map<GeneratedFile, Set<ElementEntry>> generatedGeneratedFileToElementEdges = generatedStateGraphFromFile.getMapGeneratedFileToElements();
-        assertEquals(expectedGeneratedFileToElementEdges.size(), generatedGeneratedFileToElementEdges.size());
-        Iterator<Map.Entry<GeneratedFile, Set<ElementEntry>>> generatedGeneratedFileToElementEdgesIterator = generatedGeneratedFileToElementEdges.entrySet().iterator();
-        for (Map.Entry<GeneratedFile, Set<ElementEntry>> expectedEntrySet : expectedGeneratedFileToElementEdges.entrySet()) {
-            Map.Entry<GeneratedFile, Set<ElementEntry>> generatedEntrySet = generatedGeneratedFileToElementEdgesIterator.next();
-            assertEquals(expectedEntrySet.getKey(), generatedEntrySet.getKey());
-            assertEquals(expectedEntrySet.getValue(), generatedEntrySet.getValue());
-        }
+    assertEquals(stateGraph, stateGraphFromFile);
+  }
 
-        Map<ElementEntry, InputFile> expectedElementToInputFilesEdges = stateGraph.getMapElementToInputFiles();
-        Map<ElementEntry, InputFile> generatedElementToInputFilesEdges = generatedStateGraphFromFile.getMapElementToInputFiles();
-        assertEquals(expectedElementToInputFilesEdges.size(), generatedElementToInputFilesEdges.size());
-        Iterator<Map.Entry<ElementEntry, InputFile>> generatedElementToInputFilesEdgesIterator = generatedElementToInputFilesEdges.entrySet().iterator();
-        for (Map.Entry<ElementEntry, InputFile> expectedEntrySet : expectedElementToInputFilesEdges.entrySet()) {
-            Map.Entry<ElementEntry, InputFile> generatedEntrySet = generatedElementToInputFilesEdgesIterator.next();
-            assertEquals(expectedEntrySet.getKey(), generatedEntrySet.getKey());
-            assertEquals(expectedEntrySet.getValue(), generatedEntrySet.getValue());
-        }
+  @Test
+  public void testImportStateGraphToM1Format() throws IOException {
+    File stateGraphFile = folder.newFile("stateGraph.txt");
+    PrintWriter writer = new PrintWriter(new FileOutputStream(stateGraphFile));
+    StateGraph stateGraph = createStageGraph();
+    stateGraphUtils.exportToM1Format(writer, stateGraph);
+    writer.close();
 
-        // clean up generated stateGraph.txt
-        try {
-            Files.deleteIfExists(Paths.get(StateGraphUtils.STATE_GRAPH_FILE_PATH));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    BufferedReader reader = new BufferedReader(new FileReader(stateGraphFile));
+    String line = reader.readLine();
+    assertThat(line, is("1"));
+    line = reader.readLine();
+    assertThat(line, is("generatedFile.java --> [inputFile.java]"));
+    line = reader.readLine();
+    assertThat(line, nullValue());
+    reader.close();
+  }
 
-    private StateGraph createStageGraph() {
-        StateGraph stateGraph = new StateGraph(null, null);
+  private StateGraph createStageGraph() {
+    StateGraph stateGraph = new StateGraph(null, null);
 
-        InputFile testInputFile = new InputFile("inputFile.java");
+    InputFile testInputFile = new InputFile("inputFile.java");
 
-        Set<ElementEntry> elementEntries = new HashSet<>();
-        elementEntries.add(new ElementEntry(null, "element entry"));
+    Set<ElementEntry> elementEntries = new HashSet<>();
+    elementEntries.add(new ElementEntry(null, "element entry"));
 
-        Set<GeneratedFile> generatedFiles = new HashSet<>();
-        generatedFiles.add(new GeneratedSourceFile("generatedFile.java"));
+    Set<GeneratedFile> generatedFiles = new HashSet<>();
+    generatedFiles.add(new GeneratedSourceFile("generatedFile.java"));
 
-        // forward edge
-        Map<InputFile, Set<ElementEntry>> mapInputToElements = new HashMap<>();
-        mapInputToElements.put(testInputFile, elementEntries);
-        stateGraph.setMapInputToElements(mapInputToElements);
-        // forward edge
-        Map<ElementEntry, Set<GeneratedFile>> mapElementToGeneratedFiles = new HashMap<>();
-        mapElementToGeneratedFiles.put(elementEntries.iterator().next(), generatedFiles);
-        stateGraph.setMapElementToGeneratedFiles(mapElementToGeneratedFiles);
+    // forward edge
+    Map<InputFile, Set<ElementEntry>> mapInputToElements = new HashMap<>();
+    mapInputToElements.put(testInputFile, elementEntries);
+    stateGraph.setMapInputToElements(mapInputToElements);
+    // forward edge
+    Map<ElementEntry, Set<GeneratedFile>> mapElementToGeneratedFiles = new HashMap<>();
+    mapElementToGeneratedFiles.put(elementEntries.iterator().next(), generatedFiles);
+    stateGraph.setMapElementToGeneratedFiles(mapElementToGeneratedFiles);
 
-        // backward edge
-        Map<GeneratedFile, Set<ElementEntry>> mapGeneratedFileToElements = new HashMap<>();
-        mapGeneratedFileToElements.put(generatedFiles.iterator().next(), elementEntries);
-        stateGraph.setMapGeneratedFileToElements(mapGeneratedFileToElements);
-        // backward edge
-        Map<ElementEntry, InputFile> mapElementToInputFiles = new HashMap<>();
-        mapElementToInputFiles.put(elementEntries.iterator().next(), testInputFile);
-        stateGraph.setMapElementToInputFiles(mapElementToInputFiles);
+    // backward edge
+    Map<GeneratedFile, Set<ElementEntry>> mapGeneratedFileToElements = new HashMap<>();
+    mapGeneratedFileToElements.put(generatedFiles.iterator().next(), elementEntries);
+    stateGraph.setMapGeneratedFileToElements(mapGeneratedFileToElements);
+    // backward edge
+    Map<ElementEntry, InputFile> mapElementToInputFiles = new HashMap<>();
+    mapElementToInputFiles.put(elementEntries.iterator().next(), testInputFile);
+    stateGraph.setMapElementToInputFiles(mapElementToInputFiles);
 
-        return stateGraph;
-    }
+    return stateGraph;
+  }
 }
