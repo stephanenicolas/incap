@@ -22,3 +22,6 @@ dependencies {
   // From https://github.com/google/compile-testing/issues/28
   testCompile files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
 }
+
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'

@@ -40,6 +40,7 @@ public class NRelatedToOneAPTest {
         + "@Annotation1\n" //
         + "class Test1 extends Test0{\n" //
         + "}");
+
     JavaFileObject expected10 = forSourceString("NRelatedToOneAP_Test1_Test0Gen0", "" //
         + "\n" //
         + "public class NRelatedToOneAP_Test1_Test0Gen0 {\n" //

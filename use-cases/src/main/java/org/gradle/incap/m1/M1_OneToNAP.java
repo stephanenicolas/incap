@@ -1,4 +1,4 @@
-package org.gradle.incap;
+package org.gradle.incap.m1;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,29 +12,23 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeMirror;
+import org.gradle.incap.Annotation1;
+import org.gradle.incap.IncrementalFiler;
+import org.gradle.incap.ProcessorWorkflow;
 
-import static java.util.Arrays.asList;
 import static javax.lang.model.SourceVersion.latestSupported;
 import static org.gradle.incap.Incap.getProcessorWorkflow;
 import static org.gradle.incap.util.APUtil.generateFiles;
 import static org.gradle.incap.util.APUtil.getEnclosingClassName;
 
 /**
- * This AP creates 1 target file for N related input files.
- * Related means that we can retrieve the other files from one of them.
+ * This AP creates N target files for 1.
  * This case should be easy to handle as we actually don't need incap at all,
  * the processor is already incremental and the filer will provide the build
  * system information about generated files that should be deleted when their
  * corresponding input file is deleted.
- * With Milestone 1 (when incap re-passes to javac all source files),
- * AP is not impacted.
- * With Milestone 2 (when incap will retrieve the elements of a FB), some APs
- * can get faster as they might rely on incap to retrieve annotated elements
- * that were already processed and might not need to walk the tree anymore.
  */
-public class NRelatedToOneAP extends AbstractProcessor {
+public class M1_OneToNAP extends AbstractProcessor {
 
   private IncrementalFiler incrementalFiler;
   private ProcessorWorkflow processorWorkflow;
@@ -83,20 +77,10 @@ public class NRelatedToOneAP extends AbstractProcessor {
     final Map<String, Set<? extends Element>> mapGeneratedFileNameToOrginatingElements = new HashMap<>();
     for (Element annotatedElement : annotatedElements) {
       String nameOfClassContainingElement = getEnclosingClassName(annotatedElement);
-      TypeMirror superclass = ((TypeElement) annotatedElement).getSuperclass();
-      if (superclass != null) {
-        Element superClassAsElement = ((DeclaredType) superclass).asElement();
-        if (superClassAsElement.getAnnotation(Annotation1.class) != null) {
-          String nameOfSuperClassContainingElement = getEnclosingClassName(superClassAsElement);
-          final String finalClassName = getClass().getSimpleName() //
-              + "_" //
-              + nameOfClassContainingElement //
-              + "_" //
-              + nameOfSuperClassContainingElement //
-              + "Gen0";
-          mapGeneratedFileNameToOrginatingElements.put(finalClassName, new HashSet<>(asList(annotatedElement, superClassAsElement)));
-        }
-      }
+      final String finalClassName0 = getClass().getSimpleName() + "_" + nameOfClassContainingElement + "Gen0";
+      mapGeneratedFileNameToOrginatingElements.put(finalClassName0, Collections.singleton(annotatedElement));
+      final String finalClassName1 = getClass().getSimpleName() + "_" + nameOfClassContainingElement + "Gen1";
+      mapGeneratedFileNameToOrginatingElements.put(finalClassName1, Collections.singleton(annotatedElement));
     }
     return mapGeneratedFileNameToOrginatingElements;
   }

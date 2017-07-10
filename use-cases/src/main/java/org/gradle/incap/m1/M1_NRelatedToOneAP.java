@@ -1,4 +1,4 @@
-package org.gradle.incap;
+package org.gradle.incap.m1;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,6 +14,9 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
+import org.gradle.incap.Annotation1;
+import org.gradle.incap.IncrementalFiler;
+import org.gradle.incap.ProcessorWorkflow;
 
 import static java.util.Arrays.asList;
 import static javax.lang.model.SourceVersion.latestSupported;
@@ -34,7 +37,7 @@ import static org.gradle.incap.util.APUtil.getEnclosingClassName;
  * can get faster as they might rely on incap to retrieve annotated elements
  * that were already processed and might not need to walk the tree anymore.
  */
-public class NRelatedToOneAP extends AbstractProcessor {
+public class M1_NRelatedToOneAP extends AbstractProcessor {
 
   private IncrementalFiler incrementalFiler;
   private ProcessorWorkflow processorWorkflow;
@@ -83,19 +86,19 @@ public class NRelatedToOneAP extends AbstractProcessor {
     final Map<String, Set<? extends Element>> mapGeneratedFileNameToOrginatingElements = new HashMap<>();
     for (Element annotatedElement : annotatedElements) {
       String nameOfClassContainingElement = getEnclosingClassName(annotatedElement);
+      final String finalClassName0 = getClass().getSimpleName() + "_" + nameOfClassContainingElement + "Gen0";
+      mapGeneratedFileNameToOrginatingElements.put(finalClassName0, Collections.singleton(annotatedElement));
       TypeMirror superclass = ((TypeElement) annotatedElement).getSuperclass();
-      if (superclass != null) {
-        Element superClassAsElement = ((DeclaredType) superclass).asElement();
-        if (superClassAsElement.getAnnotation(Annotation1.class) != null) {
-          String nameOfSuperClassContainingElement = getEnclosingClassName(superClassAsElement);
-          final String finalClassName = getClass().getSimpleName() //
-              + "_" //
-              + nameOfClassContainingElement //
-              + "_" //
-              + nameOfSuperClassContainingElement //
-              + "Gen0";
-          mapGeneratedFileNameToOrginatingElements.put(finalClassName, new HashSet<>(asList(annotatedElement, superClassAsElement)));
-        }
+      Element superClassAsElement = ((DeclaredType) superclass).asElement();
+      if (superClassAsElement.getAnnotation(Annotation1.class) != null) {
+        String nameOfSuperClassContainingElement = getEnclosingClassName(superClassAsElement);
+        final String finalClassName1 = getClass().getSimpleName() //
+            + "_" //
+            + nameOfClassContainingElement //
+            + "_" //
+            + nameOfSuperClassContainingElement //
+            + "Gen0";
+        mapGeneratedFileNameToOrginatingElements.put(finalClassName1, new HashSet<>(asList(annotatedElement, superClassAsElement)));
       }
     }
     return mapGeneratedFileNameToOrginatingElements;

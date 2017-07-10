@@ -6,11 +6,3 @@ buildscript {
     jcenter()
   }
 }
-
-repositories {
-  mavenCentral()
-  jcenter()
-}
-
-dependencies {
-}
