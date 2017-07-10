@@ -24,6 +24,9 @@ hs_err_pid*
 #IDE
 .idea/
 *.iml
+.classpath
+.project
+local.properties
 
 #build
 .gradle/

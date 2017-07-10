@@ -13,9 +13,10 @@ repositories {
 }
 
 dependencies {
-  //As this lib is used by incap,
-  //we should not use any compile scope dependency
-  testCompile project( ":annotations" )
+  compile project(':annotations')
+  compile project(':core')
+
+  testCompile project(':annotations')
   testCompile deps.junit
   testCompile deps.truth
   testCompile deps.compiletesting

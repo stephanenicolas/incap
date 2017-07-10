@@ -2,7 +2,7 @@ package org.gradle.incap.impl.data.util;
 
 import static javax.lang.model.SourceVersion.latestSupported;
 
-import com.example.Annotation1;
+import org.gradle.incap.Annotation1;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
