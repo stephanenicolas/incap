@@ -1,6 +1,12 @@
 # incremental-annotation-processor
 Testing for incremental DI
 
+# setup your box for JDK 7 gradle builds:
+
+Incap needs JDK 7 (as gradle does) add the path to your JDK 7 folder in your `~/gradle/gradle.properties` file:
+`java7Home=/Library/Java/JavaVirtualMachines/1.7.0_79.jdk/Contents/Home`
+
+
 # How to build a version of gradle to test incremental annotation processing
 
 1. clone gradle
