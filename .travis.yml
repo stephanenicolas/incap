@@ -1,7 +1,7 @@
 language: java
 
 jdk:
-  - oraclejdk7
+  - oraclejdk8
 
 #sonatype username and password
 env:
@@ -22,11 +22,8 @@ cache:
   directories:
     - $HOME/.m2
 
-install:
-  - ./gradlew -Pjava7Home=/usr/lib/jvm/java-7-oracle assemble
-
 script:
-  - ./gradlew -Pjava7Home=/usr/lib/jvm/java-7-oracle clean build
+  - ./gradlew clean build
 
 after_success:
 #  - ./gradlew jacocoTestReport coveralls

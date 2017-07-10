@@ -12,5 +12,8 @@ dependencies {
   testCompile deps.easymock
   testCompile deps.hamcrest
   testCompile deps.truth
-  testCompile deps.compiletesting
+  testCompile deps.compiletesting_jdk7
 }
+
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
