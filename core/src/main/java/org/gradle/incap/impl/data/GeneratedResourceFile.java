@@ -34,8 +34,12 @@ public class GeneratedResourceFile extends GeneratedFile {
     @Override
     public String toString() {
         return new StringBuilder()
+            .append(super.toString())
+            .append(FIELD_SEPARATOR)
             .append(location.toString())
+            .append(FIELD_SEPARATOR)
             .append(pkg.toString())
+            .append(FIELD_SEPARATOR)
             .append(relativeName.toString())
             .toString();
     }

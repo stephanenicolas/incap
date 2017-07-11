@@ -48,17 +48,21 @@ public class StateGraphUtilsTest {
 
   @Test
   public void testImportStateGraphToM1Format() throws IOException {
+    //GIVEN
     File stateGraphFile = folder.newFile("stateGraph.txt");
     PrintWriter writer = new PrintWriter(new FileOutputStream(stateGraphFile));
     StateGraph stateGraph = createStageGraph();
+
+    //WHEN
     stateGraphUtils.exportToM1Format(writer, stateGraph);
     writer.close();
 
+    //THEN
     BufferedReader reader = new BufferedReader(new FileReader(stateGraphFile));
     String line = reader.readLine();
     assertThat(line, is("1"));
     line = reader.readLine();
-    assertThat(line, is("generatedFile.java --> [inputFile.java]"));
+    assertThat(line, is("SOURCE:GeneratedFile.java <-- [org.gradle.incap.example.InputClass]"));
     line = reader.readLine();
     assertThat(line, nullValue());
     reader.close();
@@ -67,13 +71,13 @@ public class StateGraphUtilsTest {
   private StateGraph createStageGraph() {
     StateGraph stateGraph = new StateGraph(null, null);
 
-    InputFile testInputFile = new InputFile("inputFile.java");
+    InputFile testInputFile = new InputFile("org.gradle.incap.example.InputClass");
 
     Set<ElementEntry> elementEntries = new HashSet<>();
     elementEntries.add(new ElementEntry(null, "element entry"));
 
     Set<GeneratedFile> generatedFiles = new HashSet<>();
-    generatedFiles.add(new GeneratedSourceFile("generatedFile.java"));
+    generatedFiles.add(new GeneratedSourceFile("GeneratedFile.java"));
 
     // forward edge
     Map<InputFile, Set<ElementEntry>> mapInputToElements = new HashMap<>();

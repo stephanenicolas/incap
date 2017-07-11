@@ -15,6 +15,7 @@ import org.gradle.incap.impl.data.StateGraph;
 
 public class StateGraphUtils {
   public static final String M1_FORMAT_VERSION = "1";
+  public static final String GENERATED_BY = " <-- ";
 
   public void exportToM1Format(PrintWriter writer, StateGraph stateGraph) {
     Map<GeneratedFile, Set<InputFile>> mapGeneratedFileToInputFile = new HashMap<>(stateGraph.getMapGeneratedFileToElements().keySet().size());
@@ -32,7 +33,7 @@ public class StateGraphUtils {
     for (Map.Entry<GeneratedFile, Set<InputFile>> entryGeneratedFileToInputFile : mapGeneratedFileToInputFile.entrySet()) {
       GeneratedFile generatedFile = entryGeneratedFileToInputFile.getKey();
       Set<InputFile> inputFiles = entryGeneratedFileToInputFile.getValue();
-      writer.println(generatedFile.toString() + " --> " + inputFiles.toString());
+      writer.println(generatedFile.toString() + GENERATED_BY + inputFiles.toString());
     }
     writer.flush();
   }

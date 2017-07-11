@@ -18,7 +18,7 @@ public class GeneratedSourceFile extends GeneratedFile {
 
     @Override
     public String toString() {
-        return name.toString();
+        return super.toString() + FIELD_SEPARATOR + name.toString();
     }
 
     @Override
